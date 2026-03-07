@@ -1,0 +1,206 @@
+.maas-main-img {
+  position: relative;
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0f172a;
+  overflow: hidden;
+
+  .maas-main-img__bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .maas-main-img__line {
+    position: absolute;
+    width: 1px;
+    height: 120px;
+    background: linear-gradient(to bottom, transparent, #69ee6f, transparent);
+    opacity: 0.6;
+  }
+
+  .maas-main-img__line--1 {
+    top: 15%;
+    left: 12%;
+    transform: rotate(-25deg);
+  }
+
+  .maas-main-img__line--2 {
+    top: 25%;
+    right: 18%;
+    transform: rotate(15deg);
+  }
+
+  .maas-main-img__line--3 {
+    bottom: 35%;
+    left: 20%;
+    transform: rotate(20deg);
+  }
+
+  .maas-main-img__line--4 {
+    bottom: 20%;
+    right: 25%;
+    transform: rotate(-30deg);
+  }
+
+  .maas-main-img__line--5 {
+    top: 40%;
+    left: 50%;
+    transform: rotate(-10deg);
+  }
+
+  .maas-main-img__circle {
+    position: absolute;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: rgba(30, 41, 59, 0.8);
+    border: 2px solid #69ee6f;
+    opacity: 0.9;
+  }
+
+  .maas-main-img__circle--tl {
+    top: -120px;
+    left: -120px;
+  }
+
+  .maas-main-img__circle--br {
+    bottom: -120px;
+    right: -120px;
+  }
+
+  .maas-main-img__content {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    padding: 56px 24px;
+    text-align: center;
+  }
+
+  .maas-main-img__title {
+    margin: 0 0 20px;
+    font-size: 36px;
+    font-weight: 400;
+    color: #ffffff;
+    line-height: 1.35;
+  }
+
+  .maas-main-img__title strong {
+    font-weight: 700;
+  }
+
+  .maas-main-img__desc {
+    margin: 0 0 40px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .maas-main-img__input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 14px 14px 14px 20px;
+    background: rgba(15, 23, 42, 0.95);
+    border: 2px solid #69ee6f;
+    border-radius: 12px;
+    box-shadow: 0 0 0 1px rgba(105, 238, 111, 0.2);
+  }
+
+  .maas-main-img__input-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    background: rgba(30, 41, 59, 0.9);
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .maas-main-img__input-text {
+    flex: 1;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: left;
+    min-width: 0;
+  }
+
+  .maas-main-img__input-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    background: #69ee6f;
+    border: none;
+    border-radius: 50%;
+    color: #0f172a;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .maas-main-img__input-btn:hover {
+    background: #84cc16;
+    transform: scale(1.05);
+  }
+
+  .maas-main-img__input-btn:active {
+    transform: scale(0.98);
+  }
+
+  @media (max-width: 768px) {
+    min-height: 460px;
+
+    .maas-main-img__content {
+      padding: 40px 20px;
+    }
+
+    .maas-main-img__title {
+      font-size: 26px;
+      margin-bottom: 16px;
+    }
+
+    .maas-main-img__desc {
+      font-size: 14px;
+      margin-bottom: 32px;
+    }
+
+    .maas-main-img__input-wrap {
+      padding: 12px 12px 12px 16px;
+      gap: 10px;
+    }
+
+    .maas-main-img__input-icon {
+      width: 36px;
+      height: 36px;
+    }
+
+    .maas-main-img__input-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .maas-main-img__input-text {
+      font-size: 14px;
+    }
+
+    .maas-main-img__input-btn {
+      width: 40px;
+      height: 40px;
+    }
+
+    .maas-main-img__input-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+}

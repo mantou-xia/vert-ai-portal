@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react';
+import { getAssetPath } from '../../utils/path';
 import './PdeStudiesDetail.css';
+
+const DEFAULT_CARD_IMAGE = getAssetPath('/images/home/keyboard.png');
 
 type CardItem = {
   key: string;
@@ -79,15 +82,11 @@ const PdeStudiesDetail: React.FC = () => {
                 <p className="pde-studies-detail__card-pain">{card.pain}</p>
               </div>
               <div className="pde-studies-detail__card-img-wrap">
-                {card.image ? (
-                  <img
-                    className="pde-studies-detail__card-img"
-                    src={card.image}
-                    alt=""
-                  />
-                ) : (
-                  <div className="pde-studies-detail__card-img-placeholder" />
-                )}
+                <img
+                  className="pde-studies-detail__card-img"
+                  src={card.image || DEFAULT_CARD_IMAGE}
+                  alt=""
+                />
               </div>
               <div className="pde-studies-detail__card-slide">
                 <div className="pde-studies-detail__slide-block">

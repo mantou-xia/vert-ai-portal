@@ -24,7 +24,7 @@ const Header: React.FC = () => {
     {
       key: 'maas',
       label: 'MAAS',
-      onClick: () => navigate(routes.solutions),
+      onClick: () => navigate(routes.maas),
     },
     {
       key: 'products',

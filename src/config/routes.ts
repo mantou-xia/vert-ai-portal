@@ -1,9 +1,7 @@
 export const routes = {
   home: '/',
   products: '/products',
-  solutions: '/solutions',
-  cases: '/cases',
-  resources: '/resources',
+  maas: '/maas',
   about: '/about',
   fde: '/fde',
 } as const;

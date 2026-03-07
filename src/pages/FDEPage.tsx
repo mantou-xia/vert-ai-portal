@@ -5,6 +5,7 @@ import PdeSolution from './Pde/PdeSolution';
 import PdeCaseStudies from './Pde/PdeCaseStudies';
 import PdeStudiesDetail from './Pde/PdeStudiesDetail';
 import PdeAiPlugins from './Pde/PdeAiPlugins';
+import PdeAlgorithmExamples from './Pde/PdeAlgorithmExamples';
 import HomeBrand from './home/HomeBrand';
 
 const FDEPage: React.FC = () => {
@@ -21,6 +22,12 @@ const FDEPage: React.FC = () => {
       </section>
       <section className="fde-page__section">
         <PdeCaseStudies />
+      </section>
+      <section className="fde-page__section">
+        <PdeStudiesDetail />
+      </section>
+      <section className="fde-page__section">
+        <PdeAlgorithmExamples />
       </section>
       <section className="fde-page__section">
         <PdeStudiesDetail />

@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { getAssetPath } from '../../utils/path';
 import './HomeCompanyDetail.css';
+
+const DEFAULT_POSTER = getAssetPath('/images/home/keyboard.png');
 
 type CaseItem = {
   id: string;
@@ -27,7 +30,7 @@ const CASE_ITEMS: CaseItem[] = [
   },
   {
     id: 'case2',
-    videoPoster: '/images/home/case-poster-placeholder.jpg',
+    videoPoster: DEFAULT_POSTER,
     companyName: '某零售企业',
     companyNameEn: 'Retail Co.',
     quote: 'VERT 平台帮助我们快速构建智能客服，显著提升了客户满意度与运营效率。',
@@ -39,7 +42,7 @@ const CASE_ITEMS: CaseItem[] = [
   },
   {
     id: 'case3',
-    videoPoster: '/images/home/case-poster-placeholder.jpg',
+    videoPoster: DEFAULT_POSTER,
     companyName: '某制造企业',
     companyNameEn: 'Manufacturing',
     quote: '从数据采集到智能分析，VERT 提供了端到端的 AI 解决方案，助力我们实现智能制造升级。',
