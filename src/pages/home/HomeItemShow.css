@@ -2,6 +2,17 @@
   padding: 80px 0 40px;
   background: #ffffff;
 
+  /* 锁区模式：进入视口后固定占满一屏，切换完才能继续往下 */
+  &.home-item-show--locked {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+
+    .home-item-show__inner {
+      width: 100%;
+    }
+  }
+
   .home-item-show__inner {
     max-width: 1200px;
     margin: 0 auto;

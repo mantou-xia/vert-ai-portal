@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useWheelScroll } from '../../hooks/useWheelScroll';
 import './HomeItemShow.css';
 
 type Item = {
@@ -14,60 +15,40 @@ const items: Item[] = [
     id: 'workflow',
     title: '分秒之内，构建强大工作流',
     description: '通过可视化拖拽操作，让你直观构建灵活高效的AI应用和工作流。',
-    image: '/images/home/item-workflow.png',
+    image: '/images/home/keyboard.png',
   },
   {
     id: 'models',
     title: '无缝接入全球大模型',
     description: '通过可视化拖拽操作，让你直观构建灵活高效的AI应用和工作流。',
-    image: '/images/home/item-models.png',
+    image: '/images/home/keyboard.png',
   },
   {
     id: 'publish',
     title: '一键发布',
     description: '无需处理后期复杂性，多种发布选项满足你的不同需求。',
-    image: '/images/home/item-publish.png',
+    image: '/images/home/keyboard.png',
   },
   {
     id: 'share',
     title: '分享与共建',
     description: '支持工作流的场景套件使用，促进社区共享与团队协作。',
-    image: '/images/home/item-share.png',
+    image: '/images/home/keyboard.png',
   },
 ];
 
 const HomeItemShow: React.FC = () => {
-  const [activeIndex, setActiveIndex] = useState<number>(0);
-  const sectionRef = useRef<HTMLElement>(null);
-
+  const { sectionRef, activeIndex, setActiveIndex, isLocked } = useWheelScroll(
+    items.length,
+    { scrollThreshold: 120, lockMode: true }
+  );
   const activeItem = items[activeIndex] ?? items[0];
 
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const handleWheel = (e: WheelEvent) => {
-      setActiveIndex((prev) => {
-        let next = prev;
-        if (e.deltaY > 0) {
-          next = Math.min(prev + 1, items.length - 1);
-        } else if (e.deltaY < 0) {
-          next = Math.max(prev - 1, 0);
-        }
-
-        if (next !== prev) {
-          // 只有在切换条目时才拦截默认滚动
-          e.preventDefault();
-        }
-
-        return next;
-      });
-    };
-    el.addEventListener('wheel', handleWheel, { passive: false });
-    return () => el.removeEventListener('wheel', handleWheel);
-  }, []);
-
   return (
-    <section ref={sectionRef} className="home-item-show">
+    <section
+      ref={sectionRef}
+      className={`home-item-show ${isLocked ? 'home-item-show--locked' : ''}`}
+    >
       <div className="home-item-show__inner">
         <header className="home-item-show__header">
           <h2 className="home-item-show__title">

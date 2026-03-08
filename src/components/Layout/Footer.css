@@ -1,4 +1,6 @@
 .app-footer {
+  position: relative;
+  z-index: 50;
   background: #0f0f0f;
   color: #ffffff;
   padding: 48px 0 24px;
@@ -34,14 +36,14 @@
   .app-footer__nav {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 8px;
     flex-wrap: wrap;
-    margin-right: 150px;
+    /* margin-right: 3% */
   }
 
   .app-footer__nav-sep {
     color: rgba(255, 255, 255, 0.35);
-    margin: 0 24px;
+    margin: 0 14px;
     user-select: none;
     display: inline-flex;
     align-items: center;
