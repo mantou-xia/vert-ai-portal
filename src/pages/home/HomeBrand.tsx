@@ -1,103 +1,123 @@
-import React, { useRef, useState, useCallback, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
+import { getAssetPath } from '../../utils/path';
 import './HomeBrand.css';
 
 const BRANDS = [
-  { name: 'TOA 英腾', key: 'toa' },
-  { name: '金鹰 GOLDEN EAGLE', key: 'jinying' },
-  { name: 'SKIEER 数阅®', key: 'skieber' },
-  { name: 'ÆON', key: 'aeon' },
-  { name: '7-ELEVEN', key: '7eleven' },
-  { name: 'Gmart 金鹰', key: 'gmart' },
+  { name: '金鹰 GOLDEN EAGLE', key: 'jinying', logo: '/images/icons/home/金鹰.png' },
+  { name: 'TOA 英腾', key: 'toa', logo: '/images/icons/home/英唐.png' },
+  { name: 'SKIEER 数阔', key: 'skieber', logo: '/images/icons/home/数阔.png' },
+  { name: 'ÆON', key: 'aeon', logo: '/images/icons/home/AEON.png' },
+  { name: '7-ELEVEN', key: '7eleven', logo: '/images/icons/home/7-ELEVEN.png' },
+  { name: 'Gmart 金鹰', key: 'gmart', logo: '/images/icons/home/金鹰2.png' },
 ];
 
-const SCROLL_SPEED = 1; // px per frame
+type HomeBrandProps = {
+  activeIndex?: number;
+  onBrandClick?: (index: number) => void;
+  total?: number;
+};
 
-const HomeBrand: React.FC = () => {
+const SCROLL_SPEED = 1.2;
+
+const HomeBrand: React.FC<HomeBrandProps> = ({
+  activeIndex = -1,
+  onBrandClick,
+}) => {
+  const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollStart, setScrollStart] = useState(0);
+  const offsetRef = useRef(0);
+  const listWidthRef = useRef(0);
+  const lastCenterRef = useRef(-1);
 
-  const autoScroll = useCallback(() => {
-    const el = trackRef.current;
-    if (!el || isDragging) return;
-    const maxScroll = el.scrollWidth - el.clientWidth;
-    if (maxScroll <= 0) return;
-    let next = el.scrollLeft + SCROLL_SPEED;
-    if (next >= maxScroll / 2) next -= maxScroll / 2;
-    el.scrollLeft = next;
-    rafRef.current = requestAnimationFrame(autoScroll);
-  }, [isDragging]);
+  const detectCenter = useCallback(() => {
+    const viewport = viewportRef.current;
+    if (!viewport || !onBrandClick) return;
+
+    const viewportRect = viewport.getBoundingClientRect();
+    const centerX = viewportRect.left + viewportRect.width / 2;
+    const items = viewport.querySelectorAll<HTMLElement>('.home-brand__item');
+    if (items.length === 0) return;
+
+    let closestIdx = 0;
+    let closestDist = Infinity;
+    const brandCount = BRANDS.length;
+
+    items.forEach((item, i) => {
+      const rect = item.getBoundingClientRect();
+      const itemCenter = rect.left + rect.width / 2;
+      const dist = Math.abs(itemCenter - centerX);
+      if (dist < closestDist) {
+        closestDist = dist;
+        closestIdx = i % brandCount;
+      }
+    });
+
+    if (closestIdx !== lastCenterRef.current) {
+      lastCenterRef.current = closestIdx;
+      onBrandClick(closestIdx);
+    }
+  }, [onBrandClick]);
+
+  const loop = useCallback(() => {
+    const viewport = viewportRef.current;
+    const track = trackRef.current;
+    if (!viewport || !track) {
+      rafRef.current = requestAnimationFrame(loop);
+      return;
+    }
+
+    const list = track.querySelector<HTMLElement>('.home-brand__list');
+    if (list && listWidthRef.current === 0) {
+      listWidthRef.current = list.offsetWidth;
+    }
+    const listWidth = listWidthRef.current;
+
+    if (listWidth > 0) {
+      offsetRef.current -= SCROLL_SPEED;
+      if (offsetRef.current <= -listWidth) {
+        offsetRef.current += listWidth;
+      }
+      track.style.transform = `translate3d(${offsetRef.current}px, 0, 0)`;
+    }
+
+    detectCenter();
+    rafRef.current = requestAnimationFrame(loop);
+  }, [detectCenter]);
 
   useEffect(() => {
-    rafRef.current = requestAnimationFrame(autoScroll);
+    rafRef.current = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [autoScroll]);
-
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    if (!trackRef.current) return;
-    setIsDragging(true);
-    setStartX(e.pageX);
-    setScrollStart(trackRef.current.scrollLeft);
-  }, []);
-
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent) => {
-      if (!isDragging || !trackRef.current) return;
-      e.preventDefault();
-      const dx = e.pageX - startX;
-      const next = scrollStart - dx;
-      const maxScroll = trackRef.current.scrollWidth - trackRef.current.clientWidth;
-      trackRef.current.scrollLeft = Math.max(0, Math.min(next, maxScroll));
-    },
-    [isDragging, startX, scrollStart]
-  );
-
-  const handleMouseUp = useCallback(() => {
-    const el = trackRef.current;
-    if (el) {
-      const maxScroll = el.scrollWidth - el.clientWidth;
-      const half = maxScroll / 2;
-      if (half > 0 && el.scrollLeft >= half) {
-        el.scrollLeft = el.scrollLeft - half;
-      }
-    }
-    setIsDragging(false);
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    if (isDragging) setIsDragging(false);
-  }, [isDragging]);
+  }, [loop]);
 
   return (
-    <section className="home-brand">
-      <div className="home-brand__inner">
-        <div
-          ref={trackRef}
-          className={`home-brand__track ${isDragging ? 'home-brand__track--dragging' : ''}`}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseLeave}
-        >
-          <div className="home-brand__list">
-            {BRANDS.map((brand) => (
-              <div key={brand.key} className="home-brand__item">
-                <span className="home-brand__name">{brand.name}</span>
-              </div>
-            ))}
-          </div>
-          <div className="home-brand__list" aria-hidden="true">
-            {BRANDS.map((brand) => (
-              <div key={`dup-${brand.key}`} className="home-brand__item">
-                <span className="home-brand__name">{brand.name}</span>
-              </div>
-            ))}
-          </div>
+    <div className="home-brand">
+      <div ref={viewportRef} className="home-brand__viewport">
+        <div ref={trackRef} className="home-brand__track">
+          {[0, 1, 2].map((setIdx) => (
+            <div key={setIdx} className="home-brand__list" aria-hidden={setIdx > 0}>
+              {BRANDS.map((brand, i) => (
+                <button
+                  key={`${setIdx}-${brand.key}`}
+                  type="button"
+                  className={`home-brand__item ${
+                    i === activeIndex ? 'home-brand__item--active' : ''
+                  }`}
+                  onClick={() => onBrandClick?.(i)}
+                >
+                  <img
+                    className="home-brand__logo"
+                    src={getAssetPath(brand.logo)}
+                    alt={brand.name}
+                    draggable={false}
+                  />
+                </button>
+              ))}
+            </div>
+          ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

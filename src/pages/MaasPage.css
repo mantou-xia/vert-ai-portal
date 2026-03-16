@@ -1,0 +1,9 @@
+.maas-page {
+  .maas-page__hero {
+    position: relative;
+  }
+
+  .maas-page__section {
+    position: relative;
+  }
+}

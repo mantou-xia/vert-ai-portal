@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { getAssetPath } from '../../utils/path';
+import HomeBrand from './HomeBrand';
 import './HomeCompanyDetail.css';
 
 const DEFAULT_POSTER = getAssetPath('/images/home/keyboard.png');
@@ -12,6 +13,7 @@ type CaseItem = {
   companyNameEn: string;
   quote: string;
   stats: { label: string; value: string }[];
+  brandKey: string;
 };
 
 const CASE_ITEMS: CaseItem[] = [
@@ -21,58 +23,84 @@ const CASE_ITEMS: CaseItem[] = [
     videoSrc: '/videos/case-jinying.mp4',
     companyName: '金鹰集团',
     companyNameEn: 'Golden Eagle',
-    quote: '我们正处于 AI 革命的早期阶段，企业需要能够快速验证想法的工具。VERT 帮助我们快速落地 AI 应用，实现业务转型。',
+    quote: '"我们处在AI革命的早期，其特点是模型和生态快速演进，因此我们更加需要可以快速验证想法的工具--对于全面拥抱AI的Volvo Cars，这就是价值所在。因此我们更加需要可以快速验证想法的工具--对于全面拥抱AI，这就是价值所在。"',
     stats: [
       { label: '录入提效', value: '80%' },
       { label: '识别率', value: '95%' },
       { label: '问答率', value: '90%' },
     ],
+    brandKey: 'jinying',
   },
   {
-    id: 'case2',
+    id: 'toa',
     videoPoster: DEFAULT_POSTER,
-    companyName: '某零售企业',
-    companyNameEn: 'Retail Co.',
-    quote: 'VERT 平台帮助我们快速构建智能客服，显著提升了客户满意度与运营效率。',
+    companyName: 'TOA 英腾',
+    companyNameEn: 'ITOA',
+    quote: '"VERT 平台帮助我们快速构建智能客服，显著提升了客户满意度与运营效率。"',
     stats: [
       { label: '响应效率', value: '75%' },
       { label: '满意度', value: '92%' },
       { label: '成本节省', value: '40%' },
     ],
+    brandKey: 'toa',
   },
   {
-    id: 'case3',
+    id: 'skieer',
     videoPoster: DEFAULT_POSTER,
-    companyName: '某制造企业',
-    companyNameEn: 'Manufacturing',
-    quote: '从数据采集到智能分析，VERT 提供了端到端的 AI 解决方案，助力我们实现智能制造升级。',
+    companyName: 'SKIEER 数阅',
+    companyNameEn: 'SKIEER',
+    quote: '"从数据采集到智能分析，VERT 提供了端到端的 AI 解决方案，助力我们实现智能化升级。"',
     stats: [
       { label: '质检准确率', value: '98%' },
       { label: '产能提升', value: '35%' },
       { label: '故障预测', value: '85%' },
     ],
+    brandKey: 'skieber',
+  },
+  {
+    id: 'aeon',
+    videoPoster: DEFAULT_POSTER,
+    companyName: 'AEON',
+    companyNameEn: 'AEON',
+    quote: '"VERT 的 AI 平台让我们的零售业务实现了全面数字化转型。"',
+    stats: [
+      { label: '转化提升', value: '60%' },
+      { label: '库存优化', value: '45%' },
+      { label: '客户留存', value: '88%' },
+    ],
+    brandKey: 'aeon',
+  },
+  {
+    id: '7eleven',
+    videoPoster: DEFAULT_POSTER,
+    companyName: '7-ELEVEN',
+    companyNameEn: '7-ELEVEN',
+    quote: '"通过 VERT，我们成功将 AI 应用于门店运营的各个环节。"',
+    stats: [
+      { label: '运营效率', value: '70%' },
+      { label: '损耗降低', value: '55%' },
+      { label: '补货准确', value: '93%' },
+    ],
+    brandKey: '7eleven',
+  },
+  {
+    id: 'gmart',
+    videoPoster: DEFAULT_POSTER,
+    companyName: 'Gmart 金鹰',
+    companyNameEn: 'Gmart',
+    quote: '"VERT 帮助我们实现了从传统零售到智能零售的跨越。"',
+    stats: [
+      { label: '销售增长', value: '50%' },
+      { label: '获客成本', value: '-30%' },
+      { label: '复购率', value: '82%' },
+    ],
+    brandKey: 'gmart',
   },
 ];
 
 const HomeCompanyDetail: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeItem = CASE_ITEMS[activeIndex] ?? CASE_ITEMS[0];
-  const dotsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = dotsRef.current;
-    if (!el) return;
-    const onWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      if (e.deltaY > 0) {
-        setActiveIndex((i) => (i + 1) % CASE_ITEMS.length);
-      } else if (e.deltaY < 0) {
-        setActiveIndex((i) => (i - 1 + CASE_ITEMS.length) % CASE_ITEMS.length);
-      }
-    };
-    el.addEventListener('wheel', onWheel, { passive: false });
-    return () => el.removeEventListener('wheel', onWheel);
-  }, []);
 
   return (
     <section className="home-company-detail">
@@ -88,6 +116,7 @@ const HomeCompanyDetail: React.FC = () => {
             <div className="home-company-detail__video">
               <div className="home-company-detail__video-frame">
                 <video
+                  key={activeItem.id}
                   className="home-company-detail__video-el"
                   src={activeItem.videoSrc}
                   poster={activeItem.videoPoster}
@@ -112,8 +141,10 @@ const HomeCompanyDetail: React.FC = () => {
               </div>
 
               <blockquote className="home-company-detail__quote">
-                「{activeItem.quote}」
+                {activeItem.quote}
               </blockquote>
+
+              <hr className="home-company-detail__divider" />
 
               <div className="home-company-detail__stats">
                 {activeItem.stats.map((stat) => (
@@ -130,12 +161,7 @@ const HomeCompanyDetail: React.FC = () => {
             </div>
           </div>
 
-          <div
-            ref={dotsRef}
-            className="home-company-detail__dots"
-            role="group"
-            aria-label="切换公司案例"
-          >
+          <div className="home-company-detail__dots" role="group" aria-label="切换公司案例">
             {CASE_ITEMS.map((_, index) => (
               <button
                 key={index}
@@ -149,6 +175,12 @@ const HomeCompanyDetail: React.FC = () => {
             ))}
           </div>
         </div>
+
+        <HomeBrand
+          activeIndex={activeIndex}
+          onBrandClick={(index) => setActiveIndex(index)}
+          total={CASE_ITEMS.length}
+        />
       </div>
     </section>
   );

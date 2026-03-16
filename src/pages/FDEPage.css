@@ -1,0 +1,24 @@
+.fde-page {
+  background: #ffffff;
+
+  .fde-page__hero {
+    position: relative;
+  }
+
+  .fde-page__gap {
+    height: 40px;
+    background: #fff;
+  }
+
+  .fde-page__hero--brand .home-brand {
+    margin-top: 0;
+  }
+
+  .fde-page__section-wrap {
+    background: #ffffff;
+  }
+
+  .fde-page__section {
+    position: relative;
+  }
+}

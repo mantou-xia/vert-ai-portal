@@ -9,7 +9,7 @@ const PdeMainImg: React.FC = () => {
   return (
     <section
       className="pde-main-img"
-      style={{ backgroundImage: `url(${getAssetPath('/images/home/home-back.png')})` }}
+      style={{ backgroundImage: `url(${getAssetPath('/images/home/home-back-2.png')})` }}
     >
       <div className="pde-main-img__overlay" />
       <div className="pde-main-img__content">
@@ -24,7 +24,10 @@ const PdeMainImg: React.FC = () => {
           className="pde-main-img__btn"
           onClick={() => setIsMessageOpen(true)}
         >
-          立即开始 →
+          <span>立即开始</span>
+          <span className="pde-main-img__btn-icon">
+            <img src={getAssetPath('/images/icons/fde/箭头.svg')} alt="" />
+          </span>
         </button>
         <MessageBoard open={isMessageOpen} onClose={() => setIsMessageOpen(false)} />
       </div>

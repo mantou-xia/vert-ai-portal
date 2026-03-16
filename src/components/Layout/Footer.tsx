@@ -47,7 +47,7 @@ const Footer: React.FC = () => {
               准备好迎接下一代AI应用了吗？
             </h2>
             <p className="app-footer__cta-desc">
-            集RAG pipeline、丰富的集成和全面可观测性于一体，
+            集RAG pipeline、丰富的集成和全面可观测性于一体，<br />
             轻松上线可投产的AI Agents，无需繁琐操作。
             </p>
           </div>
@@ -56,8 +56,8 @@ const Footer: React.FC = () => {
               <div className="app-footer__qr-wrap">
                 <img
                   className="app-footer__qr-img"
-                  src={getAssetPath('/images/home/qr_code.png')}
-                  alt="微信客服"
+                  src={getAssetPath('/images/icons/home/微信号二维码.png')}
+                  alt="微信号"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
                   }}
@@ -67,10 +67,12 @@ const Footer: React.FC = () => {
               <div className="app-footer__contact-info">
                 <h3 className="app-footer__contact-title">联系我们</h3>
                 <div className="app-footer__contact-list">
-                  <p>电话: 18751969612</p>
-                  <p>邮箱: m278398343@163.com</p>
+                  <p>联系电话：18751969612</p>
+                  <p>邮箱地址：m278398343@163.com</p>
                   <p>
-                    地址: 北京市海淀区中关村大街1号
+                    公司地址：深圳市宝安区新安街道海旺社区宝兴路6号
+                    <br />
+                    海纳百川大厦B座6层
                   </p>
                 </div>
               </div>
@@ -80,7 +82,7 @@ const Footer: React.FC = () => {
 
         <div className="app-footer__bottom">
           <p className="app-footer__copyright">
-            � 2025 Breakthrough Energy, LLC. All Rights Reserved
+            © 2025 Breakthrough Energy, LLC. All Rights Reserved
           </p>
         </div>
       </div>

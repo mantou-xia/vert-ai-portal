@@ -1,3 +1,11 @@
 .about-page {
   min-height: 100vh;
+
+  .about-page__hero {
+    position: relative;
+  }
+
+  .about-page__section {
+    position: relative;
+  }
 }

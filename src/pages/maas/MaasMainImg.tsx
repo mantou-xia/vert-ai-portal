@@ -10,7 +10,7 @@ const CAROUSEL_TEXTS = [
 
 const MaasMainImg: React.FC = () => {
   const [textIndex, setTextIndex] = useState(0);
-  const [isMessageOpen, setIsMessageOpen] = useState(true);
+  const [isMessageOpen, setIsMessageOpen] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {

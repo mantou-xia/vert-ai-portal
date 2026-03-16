@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, type Variants } from 'framer-motion';
+import { useCountUp } from '../../hooks/useCountUp';
 import './HomeData.css';
 
 type StatCard = {
@@ -7,42 +8,36 @@ type StatCard = {
   title: string;
   description: string;
   label: string;
-  value: string;
+  numericValue: number;
+  suffix: string;
 };
 
 const STAT_CARDS: StatCard[] = [
   {
     id: 'team',
     title: '与团队共同成长',
-    description: '助力每一位团队成员快速掌握纵横前沿的智能工具和流程，实现效能与价值双提升。',
+    description: '助力每一个团队加速实现从创意到落地的全过程,高效构建、部署和扩展 AI 应用，将大胆构想化为现实。',
     label: '团队',
-    value: '40+',
+    numericValue: 40,
+    suffix: '+',
   },
   {
     id: 'industry',
-    title: '深受行业领袖信赖',
-    description: '涵盖多条典型行业赛道的落地方案，从场景拆解到效果验证，助力客户构建持续竞争优势。',
+    title: '深受行业领导者信赖',
+    description: '为众多行业提供可靠的解决方案，从半导体制造到生物医药等，助力客户获取竞争优势。',
     label: '行业',
-    value: '7+',
+    numericValue: 7,
+    suffix: '+',
   },
   {
     id: 'apps',
     title: '由 VERT 驱动',
-    description: '基于统一平台持续交付、运营和优化 AI 应用，帮助企业快速把创意转化为可见成效。',
+    description: '目前，我们提供的应用广泛应用于各行各业及不同部门，解决实际场景中的问题。',
     label: '应用',
-    value: '100+',
+    numericValue: 100,
+    suffix: '+',
   },
 ];
-
-const numberVariants: Variants = {
-  hidden: { opacity: 0, y: 12, scale: 0.8 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
-  },
-};
 
 const infoVariants: Variants = {
   hidden: { opacity: 0, y: 16 },
@@ -53,9 +48,56 @@ const infoVariants: Variants = {
   },
 };
 
+const slotVariants: Variants = {
+  hidden: { opacity: 0, y: '100%' },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
+const CountUpNumber: React.FC<{ end: number; suffix: string; inView: boolean }> = ({
+  end,
+  suffix,
+  inView,
+}) => {
+  const value = useCountUp({ end, duration: 2000, enabled: inView });
+  return (
+    <motion.span
+      className="home-data__stat-value"
+      variants={slotVariants}
+      initial="hidden"
+      animate={inView ? 'visible' : 'hidden'}
+    >
+      {value}{suffix}
+    </motion.span>
+  );
+};
+
 const HomeData: React.FC = () => {
+  const [inView, setInView] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setInView(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
     <motion.section
+      ref={sectionRef}
       className="home-data"
       initial="hidden"
       whileInView="visible"
@@ -68,14 +110,13 @@ const HomeData: React.FC = () => {
         >
           <h2 className="home-data__title">为企业成功奠定坚实 AI 基石</h2>
           <p className="home-data__subtitle">
-            企业实现 AI 转型，需要的不仅仅是工具，更是坚实可复用的基础设施。
-            我们提供可扩展的基础设施、细粒度的访问控制以及闭环的运营能力，
-            帮助企业稳健迈向智能时代。
+            企业实现 AI 转型，需要的不仅仅是工具，更是坚实可靠的基础设施。
+            我们提供可扩展的基础设施、细粒度的访问控制以及跨部门的无缝集成能力，帮助企业成功实现 AI 转型。
           </p>
         </motion.header>
 
         <div className="home-data__cards">
-          {STAT_CARDS.map((card, index) => (
+          {STAT_CARDS.map((card) => (
             <motion.article
               key={card.id}
               className="home-data__card"
@@ -91,14 +132,14 @@ const HomeData: React.FC = () => {
                 <p className="home-data__card-desc">{card.description}</p>
               </motion.div>
 
-              <motion.div
-                className="home-data__stat"
-                variants={numberVariants}
-                transition={{ delay: index * 0.1 }}
-              >
+              <div className="home-data__stat">
                 <span className="home-data__stat-label">{card.label}</span>
-                <span className="home-data__stat-value">{card.value}</span>
-              </motion.div>
+                <CountUpNumber
+                  end={card.numericValue}
+                  suffix={card.suffix}
+                  inView={inView}
+                />
+              </div>
             </motion.article>
           ))}
         </div>

@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Layout, Menu } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { routes } from '../../config/routes';
+import { useScrollContext } from '../../contexts/ScrollContext';
+import MessageBoard from '../../pages/MessageBoard';
 import './Header.css';
 import { getAssetPath } from '../../utils/path';
 
@@ -9,85 +11,65 @@ const { Header: AntHeader } = Layout;
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { videoProgress } = useScrollContext();
+  const isHome = location.pathname === '/' || location.pathname === routes.home;
+  const showMini = false;
+  const [isMessageOpen, setIsMessageOpen] = useState(false);
+
+  const headerBgOpacity = isHome ? Math.max(0, 1 - videoProgress * 2.5) : 1;
+  const headerStyle = isHome && videoProgress > 0.1
+    ? { background: `rgba(245,245,245,${headerBgOpacity})`, borderBottomColor: `rgba(240,240,240,${headerBgOpacity})` }
+    : undefined;
 
   const menuItems = [
-    {
-      key: 'home',
-      label: '首页',
-      onClick: () => navigate(routes.home),
-    },
-    {
-      key: 'fde-solutions',
-      label: 'FDE解决方案',
-      onClick: () => navigate(routes.fde),
-    },
-    {
-      key: 'maas',
-      label: 'MAAS',
-      onClick: () => navigate(routes.maas),
-    },
-    {
-      key: 'products',
-      label: '产品',
-      onClick: () => navigate(routes.products),
-    },
-    {
-      key: 'about',
-      label: '关于我们',
-      onClick: () => navigate(routes.about),
-    },
+    { key: 'home', label: '首页', onClick: () => navigate(routes.home) },
+    { key: 'fde-solutions', label: 'FDE解决方案', onClick: () => navigate(routes.fde) },
+    { key: 'maas', label: 'MAAS', onClick: () => navigate(routes.maas) },
+    { key: 'products', label: '产品', onClick: () => navigate(routes.products) },
+    { key: 'about', label: '关于我们', onClick: () => navigate(routes.about) },
   ];
 
   return (
-    <AntHeader className="app-header">
-      <div className="header-content">
-        <div className="header-logo" onClick={() => navigate(routes.home)}>
-          <span className="logo-text">
-            <img src={getAssetPath('/images/home/logo.png')} alt="VERT" />
-          </span>
-        </div>
+    <>
+      <AntHeader className={`app-header ${showMini ? 'app-header--mini' : ''}`} style={headerStyle}>
+        <div className="header-content">
+          {/* Normal header: logo on left, nav pill center */}
+          <div className={`header-normal ${showMini ? 'header-normal--hidden' : ''}`}>
+            <div className="header-logo" onClick={() => navigate(routes.home)}>
+              <img src={getAssetPath('/images/home/logo.png')} alt="VERT" />
+            </div>
+            <div className="header-nav-center">
+              <div className="header-nav-pill">
+                <Menu
+                  mode="horizontal"
+                  items={menuItems}
+                  className="header-menu"
+                  selectedKeys={[]}
+                />
+              </div>
+            </div>
+          </div>
 
-        <div className="header-nav-center">
-          <div className="header-nav-pill">
-            <Menu
-              mode="horizontal"
-              items={menuItems}
-              className="header-menu"
-              selectedKeys={[]}
-            />
+          {/* Mini header: centered white pill with logo + CTA */}
+          <div className={`header-mini ${showMini ? 'header-mini--visible' : ''}`}>
+            <div className="header-mini-pill">
+              <div className="header-mini-logo" onClick={() => navigate(routes.home)}>
+                <img src={getAssetPath('/images/home/logo.png')} alt="VERT" />
+              </div>
+              <button
+                type="button"
+                className="header-mini-cta"
+                onClick={() => setIsMessageOpen(true)}
+              >
+                立即开始 →
+              </button>
+            </div>
           </div>
         </div>
-
-        {/* <Space className="header-actions" size="middle">
-          <Dropdown menu={{ items: languageMenuItems }} placement="bottomRight">
-            <Button icon={<GlobalOutlined />} type="text" />
-          </Dropdown>
-
-          <Button
-            icon={themeMode === 'light' ? <MoonOutlined /> : <SunOutlined />}
-            onClick={toggleTheme}
-            type="text"
-          />
-        </Space>
-
-        <Button
-          className="mobile-menu-btn"
-          icon={<MenuOutlined />}
-          onClick={() => setMobileMenuVisible(!mobileMenuVisible)}
-          type="text"
-        /> */}
-      </div>
-
-      {/* {mobileMenuVisible && (
-        <div className="mobile-menu">
-          <Menu
-            mode="vertical"
-            items={menuItems}
-            onClick={() => setMobileMenuVisible(false)}
-          />
-        </div>
-      )} */}
-    </AntHeader>
+      </AntHeader>
+      <MessageBoard open={isMessageOpen} onClose={() => setIsMessageOpen(false)} />
+    </>
   );
 };
 
