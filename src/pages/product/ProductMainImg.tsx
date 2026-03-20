@@ -8,19 +8,19 @@ const HERO_CANVAS_WIDTH = 1088;
 const HERO_CANVAS_HEIGHT = 496;
 
 const CARD_TRAIL_POINT_COUNT = 36;
-const CARD_TRAIL_INSTANCE_COUNT = 3;
 const CARD_TRAIL_HEAD_RADIUS = 1.58;
 const CARD_TRAIL_TAIL_RADIUS = 0.45;
 const CARD_TRAIL_FADE_POWER = 1.25;
 
+const BG_TRAIL_HEAD_RADIUS = 1.58;
+const BG_TRAIL_TAIL_RATIO = 0.15;
 const BG_TRAIL_POINT_COUNT = 24;
-const BG_TRAIL_INSTANCE_COUNT = 2;
-const BG_TRAIL_HEAD_RADIUS = 1.48;
-const BG_TRAIL_TAIL_RADIUS = 0.4;
-const BG_TRAIL_FADE_POWER = 1.2;
+const BG_TRAIL_FADE_POWER = 1.55;
+const BG_TRAIL_CYCLE_MS = 5600;
+const BG_TRAIL_SPEED_REFERENCE = 56;
 
 const BG_RING_CENTER_X = 960;
-const BG_RING_CENTER_Y = 1548;
+const BG_RING_CENTER_Y = 1488;
 const BG_RING_RADIUS_2602 = 1301;
 const BG_RING_RADIUS_3000 = 1500;
 
@@ -43,12 +43,20 @@ type ValueCard = {
   description: string;
 };
 
-type CardTrailRouteId = 'card-main-forward' | 'card-main-reverse' | 'card-left-inner' | 'card-right-inner';
+type CardTrailRouteId =
+  | 'card-main-forward'
+  | 'card-main-reverse'
+  | 'card-left-upper-inner'
+  | 'card-right-upper-inner'
+  | 'card-left-lower-inner'
+  | 'card-right-lower-inner';
 type BgTrailRouteId = 'bg-ring-2602' | 'bg-ring-3000';
 
 type TrailRoute<T extends string> = {
   id: T;
   speed: number;
+  direction?: 1 | -1;
+  phaseRatio?: number;
 };
 
 type TrailPoint = {
@@ -59,10 +67,16 @@ type TrailPoint = {
 };
 
 type TrailRunner = {
-  routeIndex: number;
+  routeId: CardTrailRouteId;
   travelledDistance: number;
   speedScale: number;
   history: Array<{ x: number; y: number }>;
+};
+
+type BgTrailState = {
+  id: BgTrailRouteId;
+  head: TrailPoint;
+  tail: TrailPoint[];
 };
 
 const heroNodes: HeroNode[] = [
@@ -71,7 +85,7 @@ const heroNodes: HeroNode[] = [
   { key: 'left-kimi', x: 83, y: 351, size: 92, icon: '/images/icons/product/kimi.svg', alt: 'Kimi', side: 'left' },
   { key: 'left-wecom', x: 256, y: 96, size: 72, icon: '/images/icons/product/企微.svg', alt: '企微', side: 'left' },
   { key: 'left-gemini', x: 388, y: 178, size: 61, alt: 'Gemini', side: 'left', variant: 'gemini' },
-  { key: 'left-claude', x: 304, y: 326, size: 72, alt: 'Claude', side: 'left', variant: 'claude' },
+  { key: 'left-claude', x: 304, y: 326, size: 80, alt: 'Claude', side: 'left', variant: 'claude' },
   { key: 'right-dingtalk', x: 684, y: 173, size: 72, icon: '/images/icons/product/钉钉.svg', alt: '钉钉', side: 'right' },
   { key: 'right-wecom', x: 765, y: 101, size: 64, icon: '/images/icons/product/企微.svg', alt: '企微', side: 'right' },
   { key: 'right-feishu', x: 714, y: 326, size: 72, icon: '/images/icons/product/飞书.svg', alt: '飞书', side: 'right' },
@@ -110,30 +124,45 @@ const valueCards: ValueCard[] = [
 
 const cardTrailRouteOrder: TrailRoute<CardTrailRouteId>[] = [
   { id: 'card-main-forward', speed: 186 },
-  { id: 'card-left-inner', speed: 138 },
   { id: 'card-main-reverse', speed: 186 },
-  { id: 'card-right-inner', speed: 138 },
+  { id: 'card-left-upper-inner', speed: 140 },
+  { id: 'card-right-upper-inner', speed: 140 },
+  { id: 'card-left-lower-inner', speed: 132 },
+  { id: 'card-right-lower-inner', speed: 132 },
 ];
 
 const bgTrailRouteOrder: TrailRoute<BgTrailRouteId>[] = [
-  { id: 'bg-ring-2602', speed: 68 },
-  { id: 'bg-ring-3000', speed: 54 },
+  { id: 'bg-ring-3000', speed: 28, direction: -1, phaseRatio: 0.875 },
+  { id: 'bg-ring-2602', speed: 28, direction: 1, phaseRatio: 0.625 },
 ];
 
 const toCanvasXPercent = (x: number) => `${(x / HERO_CANVAS_WIDTH) * 100}%`;
 const toCanvasYPercent = (y: number) => `${(y / HERO_CANVAS_HEIGHT) * 100}%`;
+const buildTrailPath = (points: Array<{ x: number; y: number }>) => {
+  if (points.length === 0) {
+    return '';
+  }
+  if (points.length === 1) {
+    return `M ${points[0].x} ${points[0].y}`;
+  }
+  return `M ${points[0].x} ${points[0].y} ${points.slice(1).map((p) => `L ${p.x} ${p.y}`).join(' ')}`;
+};
 
 const ProductMainImg: React.FC = () => {
   const [isMessageOpen, setIsMessageOpen] = useState(false);
   const [activeLane, setActiveLane] = useState<'left' | 'right'>('left');
   const [cardTrailGroups, setCardTrailGroups] = useState<TrailPoint[][]>([]);
-  const [bgTrailGroups, setBgTrailGroups] = useState<TrailPoint[][]>([]);
+  const [bgTrailStates, setBgTrailStates] = useState<BgTrailState[]>([]);
+  const heroSectionRef = useRef<HTMLElement | null>(null);
+  const bgSvgRef = useRef<SVGSVGElement | null>(null);
 
   const cardPathRefs = useRef<Record<CardTrailRouteId, SVGPathElement | null>>({
     'card-main-forward': null,
     'card-main-reverse': null,
-    'card-left-inner': null,
-    'card-right-inner': null,
+    'card-left-upper-inner': null,
+    'card-right-upper-inner': null,
+    'card-left-lower-inner': null,
+    'card-right-lower-inner': null,
   });
 
   const bgPathRefs = useRef<Record<BgTrailRouteId, SVGCircleElement | null>>({
@@ -142,7 +171,6 @@ const ProductMainImg: React.FC = () => {
   });
 
   const cardTrailRunnersRef = useRef<TrailRunner[]>([]);
-  const bgTrailRunnersRef = useRef<TrailRunner[]>([]);
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -153,11 +181,10 @@ const ProductMainImg: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const routeSeeds = [0, 1, 3];
-    cardTrailRunnersRef.current = Array.from({ length: CARD_TRAIL_INSTANCE_COUNT }, (_, index) => ({
-      routeIndex: routeSeeds[index % routeSeeds.length],
-      travelledDistance: index * 166,
-      speedScale: 0.9 + index * 0.07,
+    cardTrailRunnersRef.current = cardTrailRouteOrder.map((route, index) => ({
+      routeId: route.id,
+      travelledDistance: index * 120,
+      speedScale: 0.92 + index * 0.04,
       history: [],
     }));
 
@@ -173,10 +200,10 @@ const ProductMainImg: React.FC = () => {
       lastTimestamp = timestamp;
 
       cardTrailRunnersRef.current.forEach((runner) => {
-        let route = cardTrailRouteOrder[runner.routeIndex];
-        let currentPath = cardPathRefs.current[route.id];
+        const route = cardTrailRouteOrder.find((item) => item.id === runner.routeId);
+        const currentPath = route ? cardPathRefs.current[route.id] : null;
 
-        if (!currentPath) {
+        if (!route || !currentPath) {
           return;
         }
 
@@ -185,16 +212,7 @@ const ProductMainImg: React.FC = () => {
 
         while (runner.travelledDistance >= totalLength) {
           runner.travelledDistance -= totalLength;
-          runner.routeIndex = (runner.routeIndex + 1) % cardTrailRouteOrder.length;
-          route = cardTrailRouteOrder[runner.routeIndex];
-          currentPath = cardPathRefs.current[route.id];
-
-          if (!currentPath) {
-            return;
-          }
-
           totalLength = currentPath.getTotalLength();
-          runner.history = [];
         }
 
         const point = currentPath.getPointAtLength(Math.max(0, Math.min(runner.travelledDistance, totalLength)));
@@ -228,16 +246,202 @@ const ProductMainImg: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const routeSeeds = [0, 1];
-    bgTrailRunnersRef.current = Array.from({ length: BG_TRAIL_INSTANCE_COUNT }, (_, index) => ({
-      routeIndex: routeSeeds[index % routeSeeds.length],
-      travelledDistance: index * 520,
-      speedScale: 0.92 + index * 0.08,
-      history: [],
-    }));
-
     let rafId = 0;
+    let geometryRafId = 0;
     let lastTimestamp = 0;
+    let elapsedMs = 0;
+    type SegmentSample = {
+      x: number;
+      y: number;
+      d: number;
+    };
+    type RouteGeometry = {
+      id: BgTrailRouteId;
+      samples: SegmentSample[];
+      totalDistance: number;
+    };
+    const routeGeometryRef: { current: Record<BgTrailRouteId, RouteGeometry | null> } = {
+      current: { 'bg-ring-2602': null, 'bg-ring-3000': null },
+    };
+    const getPointAtDistance = (samples: SegmentSample[], targetDistance: number) => {
+      if (samples.length === 0) {
+        return { x: 0, y: 0 };
+      }
+
+      if (targetDistance <= 0) {
+        return { x: samples[0].x, y: samples[0].y };
+      }
+
+      const last = samples[samples.length - 1];
+      if (targetDistance >= last.d) {
+        return { x: last.x, y: last.y };
+      }
+
+      for (let i = 1; i < samples.length; i += 1) {
+        const prev = samples[i - 1];
+        const next = samples[i];
+        if (targetDistance <= next.d) {
+          const span = Math.max(0.0001, next.d - prev.d);
+          const t = (targetDistance - prev.d) / span;
+          return {
+            x: prev.x + (next.x - prev.x) * t,
+            y: prev.y + (next.y - prev.y) * t,
+          };
+        }
+      }
+
+      return { x: last.x, y: last.y };
+    };
+    const buildRouteGeometry = (
+      routeId: BgTrailRouteId,
+      circle: SVGCircleElement,
+      sectionRect: DOMRect,
+      viewportRect: { left: number; top: number; right: number; bottom: number },
+      matrix: DOMMatrix,
+    ): RouteGeometry | null => {
+      const totalLength = circle.getTotalLength();
+      const sampleCount = 1000;
+      const visibleRect = {
+        left: Math.max(sectionRect.left, viewportRect.left),
+        top: Math.max(sectionRect.top, viewportRect.top),
+        right: Math.min(sectionRect.right, viewportRect.right),
+        bottom: Math.min(sectionRect.bottom, viewportRect.bottom),
+      };
+
+      if (visibleRect.left >= visibleRect.right || visibleRect.top >= visibleRect.bottom) {
+        return null;
+      }
+
+      const samples = Array.from({ length: sampleCount }, (_, index) => {
+        const lengthAt = (totalLength * index) / sampleCount;
+        const point = circle.getPointAtLength(lengthAt);
+        const screenPoint = new DOMPoint(point.x, point.y).matrixTransform(matrix);
+        const isInVisibleBox =
+          screenPoint.x >= visibleRect.left &&
+          screenPoint.x <= visibleRect.right &&
+          screenPoint.y >= visibleRect.top &&
+          screenPoint.y <= visibleRect.bottom;
+        const isInTargetHemisphere = point.y <= BG_RING_CENTER_Y;
+
+        return {
+          x: point.x,
+          y: point.y,
+          screenX: screenPoint.x,
+          visible: isInVisibleBox && isInTargetHemisphere,
+        };
+      });
+
+      let bestStart = 0;
+      let bestLength = 0;
+      let runStart = -1;
+      let runLength = 0;
+      for (let i = 0; i < sampleCount * 2; i += 1) {
+        if (samples[i % sampleCount].visible) {
+          if (runStart < 0) {
+            runStart = i;
+            runLength = 1;
+          } else {
+            runLength += 1;
+          }
+
+          if (runLength > bestLength) {
+            bestLength = runLength;
+            bestStart = runStart;
+          }
+        } else {
+          runStart = -1;
+          runLength = 0;
+        }
+      }
+
+      if (bestLength < 4) {
+        return null;
+      }
+
+      const segmentLength = Math.min(bestLength, sampleCount);
+      const segment = Array.from({ length: segmentLength }, (_, offset) => samples[(bestStart + offset) % sampleCount]);
+
+      let minXIndex = 0;
+      let maxXIndex = 0;
+      for (let i = 1; i < segment.length; i += 1) {
+        if (segment[i].screenX < segment[minXIndex].screenX) {
+          minXIndex = i;
+        }
+        if (segment[i].screenX > segment[maxXIndex].screenX) {
+          maxXIndex = i;
+        }
+      }
+
+      const startIndex = routeId === 'bg-ring-3000' ? maxXIndex : minXIndex;
+      const endIndex = routeId === 'bg-ring-3000' ? minXIndex : maxXIndex;
+      let directedSamples =
+        startIndex <= endIndex
+          ? segment.slice(startIndex, endIndex + 1)
+          : segment.slice(endIndex, startIndex + 1).reverse();
+
+      const firstPoint = directedSamples[0];
+      const lastPoint = directedSamples[directedSamples.length - 1];
+      const shouldReverseDirection =
+        (routeId === 'bg-ring-3000' && firstPoint.screenX < lastPoint.screenX) ||
+        (routeId === 'bg-ring-2602' && firstPoint.screenX > lastPoint.screenX);
+      if (shouldReverseDirection) {
+        directedSamples = [...directedSamples].reverse();
+      }
+
+      if (directedSamples.length < 3) {
+        return null;
+      }
+
+      const normalizedSamples: SegmentSample[] = [{ x: directedSamples[0].x, y: directedSamples[0].y, d: 0 }];
+      let distance = 0;
+      for (let i = 1; i < directedSamples.length; i += 1) {
+        const prev = directedSamples[i - 1];
+        const next = directedSamples[i];
+        distance += Math.hypot(next.x - prev.x, next.y - prev.y);
+        normalizedSamples.push({ x: next.x, y: next.y, d: distance });
+      }
+
+      if (distance < 1) {
+        return null;
+      }
+
+      return { id: routeId, samples: normalizedSamples, totalDistance: distance };
+    };
+    const refreshRouteGeometry = () => {
+      const svg = bgSvgRef.current;
+      const section = heroSectionRef.current;
+      if (!svg || !section) {
+        return;
+      }
+
+      const matrix = svg.getScreenCTM();
+      if (!matrix) {
+        return;
+      }
+
+      const sectionRect = section.getBoundingClientRect();
+      const viewportRect = { left: 0, top: 0, right: window.innerWidth, bottom: window.innerHeight };
+
+      bgTrailRouteOrder.forEach((route) => {
+        const circle = bgPathRefs.current[route.id];
+        if (!circle) {
+          routeGeometryRef.current[route.id] = null;
+          return;
+        }
+
+        routeGeometryRef.current[route.id] = buildRouteGeometry(route.id, circle, sectionRect, viewportRect, matrix);
+      });
+    };
+    const scheduleGeometryRefresh = () => {
+      if (geometryRafId) {
+        window.cancelAnimationFrame(geometryRafId);
+      }
+      geometryRafId = window.requestAnimationFrame(refreshRouteGeometry);
+    };
+
+    scheduleGeometryRefresh();
+    window.addEventListener('resize', scheduleGeometryRefresh);
+    window.addEventListener('scroll', scheduleGeometryRefresh, { passive: true });
 
     const tick = (timestamp: number) => {
       if (lastTimestamp === 0) {
@@ -246,51 +450,65 @@ const ProductMainImg: React.FC = () => {
 
       const deltaSeconds = (timestamp - lastTimestamp) / 1000;
       lastTimestamp = timestamp;
+      elapsedMs += deltaSeconds * 1000;
 
-      bgTrailRunnersRef.current.forEach((runner) => {
-        const route = bgTrailRouteOrder[runner.routeIndex];
-        const currentPath = bgPathRefs.current[route.id];
+      setBgTrailStates(
+        bgTrailRouteOrder
+          .map((route) => {
+            const geometry = routeGeometryRef.current[route.id];
+            if (!geometry) {
+              return null;
+            }
 
-        if (!currentPath) {
-          return;
-        }
+            const scaledElapsedMs = elapsedMs * (route.speed / BG_TRAIL_SPEED_REFERENCE);
+            const progress = (scaledElapsedMs % BG_TRAIL_CYCLE_MS) / BG_TRAIL_CYCLE_MS;
+            const firstSample = geometry.samples[0];
+            const lastSample = geometry.samples[geometry.samples.length - 1];
+            const isLeftToRight = firstSample.x < lastSample.x;
+            const shouldBeLeftToRight = route.id === 'bg-ring-2602';
+            const routeProgress = isLeftToRight === shouldBeLeftToRight ? progress : 1 - progress;
+            const headDistance = geometry.totalDistance * routeProgress;
+            const tailLength = geometry.totalDistance * BG_TRAIL_TAIL_RATIO;
+            const step = tailLength / Math.max(1, BG_TRAIL_POINT_COUNT - 1);
+            const headPoint = getPointAtDistance(geometry.samples, headDistance);
+            const tail = Array.from({ length: BG_TRAIL_POINT_COUNT }, (_, index) => {
+              const distance = Math.max(0, headDistance - index * step);
+              const point = getPointAtDistance(geometry.samples, distance);
+              const fade = 1 - index / BG_TRAIL_POINT_COUNT;
+              return {
+                x: point.x,
+                y: point.y,
+                alpha: Math.pow(fade, BG_TRAIL_FADE_POWER) * 0.56,
+                radius: 0.34 + fade * 0.82,
+              };
+            });
 
-        let totalLength = currentPath.getTotalLength();
-        runner.travelledDistance += route.speed * runner.speedScale * deltaSeconds;
-
-        while (runner.travelledDistance >= totalLength) {
-          runner.travelledDistance -= totalLength;
-          totalLength = currentPath.getTotalLength();
-        }
-
-        const point = currentPath.getPointAtLength(Math.max(0, Math.min(runner.travelledDistance, totalLength)));
-        runner.history.unshift({ x: point.x, y: point.y });
-
-        if (runner.history.length > BG_TRAIL_POINT_COUNT) {
-          runner.history.length = BG_TRAIL_POINT_COUNT;
-        }
-      });
-
-      setBgTrailGroups(
-        bgTrailRunnersRef.current.map((runner, runnerIndex) =>
-          runner.history.map((item, pointIndex) => {
-            const fade = 1 - pointIndex / BG_TRAIL_POINT_COUNT;
-            const groupFade = 1 - runnerIndex * 0.08;
             return {
-              x: item.x,
-              y: item.y,
-              alpha: Math.pow(fade, BG_TRAIL_FADE_POWER) * groupFade,
-              radius: BG_TRAIL_TAIL_RADIUS + fade * (BG_TRAIL_HEAD_RADIUS - BG_TRAIL_TAIL_RADIUS),
-            };
-          }),
-        ),
+              id: route.id,
+              head: {
+                x: headPoint.x,
+                y: headPoint.y,
+                alpha: 0.8,
+                radius: BG_TRAIL_HEAD_RADIUS,
+              },
+              tail,
+            } satisfies BgTrailState;
+          })
+          .filter((item): item is BgTrailState => Boolean(item)),
       );
 
       rafId = window.requestAnimationFrame(tick);
     };
 
     rafId = window.requestAnimationFrame(tick);
-    return () => window.cancelAnimationFrame(rafId);
+    return () => {
+      window.cancelAnimationFrame(rafId);
+      if (geometryRafId) {
+        window.cancelAnimationFrame(geometryRafId);
+      }
+      window.removeEventListener('resize', scheduleGeometryRefresh);
+      window.removeEventListener('scroll', scheduleGeometryRefresh);
+    };
   }, []);
 
   const createCardPathRefHandler = (id: CardTrailRouteId) => (node: SVGPathElement | null) => {
@@ -302,10 +520,10 @@ const ProductMainImg: React.FC = () => {
   };
 
   return (
-    <section className="product-main-img">
+    <section ref={heroSectionRef} className="product-main-img">
       <div className="product-main-img__bg-overlay" />
 
-      <svg className="product-main-img__background-arc-svg" viewBox="0 0 1920 1600" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+      <svg ref={bgSvgRef} className="product-main-img__background-arc-svg" viewBox="0 0 1920 1600" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
         <defs>
           <filter id="productMainImgBgTrailBlur" x="-30" y="-30" width="60" height="60" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
             <feFlood floodOpacity="0" result="BackgroundImageFix" />
@@ -318,14 +536,31 @@ const ProductMainImg: React.FC = () => {
         <circle className="product-main-img__background-ring product-main-img__background-ring--2602" cx={BG_RING_CENTER_X} cy={BG_RING_CENTER_Y} r={BG_RING_RADIUS_2602} />
 
         <g className="product-main-img__background-arc-trail">
-          {bgTrailGroups.map((group, groupIndex) => (
-            <g key={`bg-trail-group-${groupIndex}`}>
-              {[...group].reverse().map((point, pointIndex) => (
-                <g key={`bg-${groupIndex}-${pointIndex}-${point.x.toFixed(1)}-${point.y.toFixed(1)}`}>
-                  <circle cx={point.x} cy={point.y} r={point.radius * 1.06} fill="#AEFF21" opacity={point.alpha * 0.22} filter="url(#productMainImgBgTrailBlur)" />
-                  <circle cx={point.x} cy={point.y} r={point.radius} fill="#D8FF8A" opacity={Math.min(1, point.alpha * 1.08)} />
-                </g>
-              ))}
+          {bgTrailStates.map((state) => (
+            <g key={`bg-trail-${state.id}`}>
+              {(() => {
+                const trailPoints = [...state.tail].reverse();
+                const trailPath = buildTrailPath(trailPoints);
+                const tailStart = trailPoints[0] ?? { x: state.head.x, y: state.head.y };
+                const tailEnd = trailPoints[trailPoints.length - 1] ?? { x: state.head.x, y: state.head.y };
+                const gradientId = `productMainImgBgTrailGrad-${state.id}`;
+                return (
+                  <>
+                    <defs>
+                      <linearGradient id={gradientId} x1={tailStart.x} y1={tailStart.y} x2={tailEnd.x} y2={tailEnd.y} gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stopColor="#D5FF7D" stopOpacity="0.02" />
+                        <stop offset="0.45" stopColor="#D5FF7D" stopOpacity="0.16" />
+                        <stop offset="0.78" stopColor="#D5FF7D" stopOpacity="0.38" />
+                        <stop offset="1" stopColor="#D5FF7D" stopOpacity="0.72" />
+                      </linearGradient>
+                    </defs>
+                    <path d={trailPath} className="product-main-img__background-trail-path product-main-img__background-trail-path--glow" />
+                    <path d={trailPath} className="product-main-img__background-trail-path product-main-img__background-trail-path--core" stroke={`url(#${gradientId})`} />
+                  </>
+                );
+              })()}
+              <circle cx={state.head.x} cy={state.head.y} r={state.head.radius * 1.2} fill="#AEFF21" opacity={0.08} filter="url(#productMainImgBgTrailBlur)" />
+              <circle cx={state.head.x} cy={state.head.y} r={state.head.radius} fill="#D5FF7D" opacity={0.72} />
             </g>
           ))}
         </g>
@@ -430,14 +665,24 @@ const ProductMainImg: React.FC = () => {
               <path ref={createCardPathRefHandler('card-main-forward')} className="product-main-img__topology-trail-track" d="M34 248H1054" />
               <path ref={createCardPathRefHandler('card-main-reverse')} className="product-main-img__topology-trail-track" d="M1054 248H34" />
               <path
-                ref={createCardPathRefHandler('card-left-inner')}
+                ref={createCardPathRefHandler('card-left-upper-inner')}
                 className="product-main-img__topology-trail-track"
                 d="M216.408 132H347.599C360.854 132 371.599 142.745 371.599 156V188C371.599 201.255 382.344 212 395.599 212H549.865"
               />
               <path
-                ref={createCardPathRefHandler('card-right-inner')}
+                ref={createCardPathRefHandler('card-right-upper-inner')}
                 className="product-main-img__topology-trail-track"
                 d="M873.191 132H741.999C728.744 132 717.999 142.745 717.999 156V188C717.999 201.255 707.254 212 693.999 212H491.734"
+              />
+              <path
+                ref={createCardPathRefHandler('card-left-lower-inner')}
+                className="product-main-img__topology-trail-track"
+                d="M216.408 365.6H347.599C360.854 365.6 371.599 354.855 371.599 341.6V309.6C371.599 296.345 382.344 285.6 395.599 285.6H445.865"
+              />
+              <path
+                ref={createCardPathRefHandler('card-right-lower-inner')}
+                className="product-main-img__topology-trail-track"
+                d="M873.191 365.6H741.999C728.744 365.6 717.999 354.855 717.999 341.6V309.6C717.999 296.345 707.254 285.6 693.999 285.6H491.734"
               />
             </svg>
 
@@ -452,7 +697,7 @@ const ProductMainImg: React.FC = () => {
                 }
               >
                 <span>VERT</span>
-                <img src={getAssetPath('/images/icons/product/绿点.svg')} alt="" aria-hidden />
+                <img src={getAssetPath('/images/icons/product/DeepSeek.svg')} alt="" aria-hidden />
               </div>
               <div
                 className="product-main-img__vert-pill product-main-img__vert-pill--right"
@@ -464,7 +709,7 @@ const ProductMainImg: React.FC = () => {
                 }
               >
                 <span>VERT</span>
-                <img src={getAssetPath('/images/icons/product/绿点.svg')} alt="" aria-hidden />
+                <img src={getAssetPath('/images/icons/product/DeepSeek.svg')} alt="" aria-hidden />
               </div>
 
               {heroNodes.map((node) => (

@@ -25,6 +25,7 @@
     height: auto;
     aspect-ratio: 1920 / 1600;
     transform: translateX(-50%);
+    overflow: visible;
     pointer-events: none;
     z-index: 0;
     opacity: 0.88;
@@ -42,11 +43,27 @@
   }
 
   .product-main-img__background-ring--2602 {
-    stroke: rgba(174, 255, 33, 0.46);
+    stroke: rgba(114, 114, 114, 0.42);
   }
 
   .product-main-img__background-arc-trail {
     mix-blend-mode: screen;
+  }
+
+  .product-main-img__background-trail-path {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .product-main-img__background-trail-path--glow {
+    stroke: rgba(174, 255, 33, 0.22);
+    stroke-width: 4.2;
+    filter: url(#productMainImgBgTrailBlur);
+  }
+
+  .product-main-img__background-trail-path--core {
+    stroke-width: 2;
   }
 
   .product-main-img__background-arc-track {
@@ -327,7 +344,7 @@
   }
 
   .product-main-img__vert-pill img {
-    width: 32%;
+    width: 36%;
     max-width: 25.6px;
     aspect-ratio: 1;
     object-fit: contain;
@@ -389,10 +406,10 @@
     z-index: 1;
   }
 
-  .product-main-img__gemini-icon {
+  .product-main-img__node .product-main-img__gemini-icon {
     position: absolute;
-    width: 39.3443%;
-    height: 39.3443%;
+    width: 70%;
+    height: 70%;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -424,10 +441,10 @@
     object-fit: contain;
   }
 
-  .product-main-img__claude-icon {
+  .product-main-img__node .product-main-img__claude-icon {
     position: absolute;
-    width: 48.5%;
-    height: 48.5%;
+    width: 70%;
+    height: 70%;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -451,8 +468,8 @@
 
   .product-main-img__center-glow {
     position: absolute;
-    width: 230%;
-    height: 230%;
+    width: 300%;
+    height: 300%;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
