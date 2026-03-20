@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { GlobalOutlined } from '@ant-design/icons';
+import React, { useEffect, useRef, useState } from 'react';
 import { Layout } from 'antd';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { routes } from '../../config/routes';
-import { useScrollContext } from '../../contexts/ScrollContext';
 import MessageBoard from '../../pages/MessageBoard';
 import CTAButton from '../common/CTAButton';
 import { getAssetPath } from '../../utils/path';
 import './Header.css';
 
 const { Header: AntHeader } = Layout;
+
+const MINI_SCROLL_THRESHOLD = 40;
 
 type HeaderMenuItem = {
   key: string;
@@ -20,19 +20,52 @@ type HeaderMenuItem = {
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { videoProgress } = useScrollContext();
-  const isHome = location.pathname === '/' || location.pathname === routes.home;
-  const showMini = false;
+  const [isMiniHeader, setIsMiniHeader] = useState(false);
   const [isMessageOpen, setIsMessageOpen] = useState(false);
+  const miniStateRef = useRef(false);
+  const lastScrollYRef = useRef(0);
 
-  const headerBgOpacity = isHome ? Math.max(0, 1 - videoProgress * 2.5) : 1;
-  const headerStyle =
-    isHome && videoProgress > 0.1
-      ? {
-          background: `rgba(245,245,245,${headerBgOpacity})`,
-          borderBottomColor: `rgba(240,240,240,${headerBgOpacity})`,
-        }
-      : undefined;
+  useEffect(() => {
+    let rafId: number | null = null;
+
+    const syncHeaderMode = () => {
+      const currentScrollY = window.scrollY;
+      const prevScrollY = lastScrollYRef.current;
+      let nextMini = miniStateRef.current;
+
+      if (currentScrollY <= MINI_SCROLL_THRESHOLD) {
+        nextMini = false;
+      } else if (currentScrollY > prevScrollY) {
+        nextMini = true;
+      } else if (currentScrollY < prevScrollY) {
+        nextMini = false;
+      }
+
+      if (miniStateRef.current !== nextMini) {
+        miniStateRef.current = nextMini;
+        setIsMiniHeader(nextMini);
+      }
+      lastScrollYRef.current = currentScrollY;
+      rafId = null;
+    };
+
+    const onScroll = () => {
+      if (rafId === null) {
+        rafId = window.requestAnimationFrame(syncHeaderMode);
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    lastScrollYRef.current = window.scrollY;
+    syncHeaderMode();
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+      }
+    };
+  }, [location.pathname]);
 
   const menuItems: HeaderMenuItem[] = [
     { key: 'home', label: '首页', path: routes.home },
@@ -51,9 +84,9 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <AntHeader className={`app-header ${showMini ? 'app-header--mini' : ''}`} style={headerStyle}>
+      <AntHeader className={`app-header ${isMiniHeader ? 'app-header--mini' : ''}`}>
         <div className="header-content">
-          <div className={`header-normal ${showMini ? 'header-normal--hidden' : ''}`}>
+          <div className={`header-normal ${isMiniHeader ? 'header-normal--hidden' : ''}`}>
             <div className="header-brand" onClick={() => navigate(routes.home)}>
               <img src={getAssetPath('/images/home/logo.png')} alt="VERT" />
             </div>
@@ -75,7 +108,7 @@ const Header: React.FC = () => {
               </div>
 
               <button type="button" className="header-language-btn" aria-label="语言设置">
-                <GlobalOutlined />
+                <img src={getAssetPath('/images/icons/网络.svg')} alt="" />
               </button>
             </div>
 
@@ -84,12 +117,14 @@ const Header: React.FC = () => {
             </div>
           </div>
 
-          <div className={`header-mini ${showMini ? 'header-mini--visible' : ''}`}>
+          <div className={`header-mini ${isMiniHeader ? 'header-mini--visible' : ''}`}>
             <div className="header-mini-pill">
               <div className="header-mini-logo" onClick={() => navigate(routes.home)}>
                 <img src={getAssetPath('/images/home/logo.png')} alt="VERT" />
               </div>
-              <CTAButton className="header-mini-cta" onClick={() => setIsMessageOpen(true)} />
+              <CTAButton className="header-mini-cta" onClick={() => setIsMessageOpen(true)}>
+                立即开始
+              </CTAButton>
             </div>
           </div>
         </div>
