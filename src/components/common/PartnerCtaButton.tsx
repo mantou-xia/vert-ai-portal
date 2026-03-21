@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { getAssetPath } from '../../utils/path';
 import './PartnerCtaButton.css';
 
@@ -13,11 +14,12 @@ const PartnerCtaButton: React.FC<PartnerCtaButtonProps> = ({
   type = 'button',
   onClick,
 }) => {
+  const { t } = useTranslation();
   const mergedClassName = ['partner-cta-button', className].filter(Boolean).join(' ');
 
   return (
     <button type={type} className={mergedClassName} onClick={onClick}>
-      成为合作伙伴
+      {t('common.becomePartner')}
       <span className="partner-cta-button__icon" aria-hidden>
         <img src={getAssetPath('/images/icons/fde/箭头.svg')} alt="" />
       </span>
@@ -26,4 +28,3 @@ const PartnerCtaButton: React.FC<PartnerCtaButtonProps> = ({
 };
 
 export default PartnerCtaButton;
-

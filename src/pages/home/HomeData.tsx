@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, type Variants } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { useCountUp } from '../../hooks/useCountUp';
 import './HomeData.css';
 
@@ -11,33 +12,6 @@ type StatCard = {
   numericValue: number;
   suffix: string;
 };
-
-const STAT_CARDS: StatCard[] = [
-  {
-    id: 'team',
-    title: '与团队共同成长',
-    description: '助力每一个团队加速实现从创意到落地的全过程,高效构建、部署和扩展 AI 应用，将大胆构想化为现实。',
-    label: '团队',
-    numericValue: 40,
-    suffix: '+',
-  },
-  {
-    id: 'industry',
-    title: '深受行业领导者信赖',
-    description: '为众多行业提供可靠的解决方案，从半导体制造到生物医药等，助力客户获取竞争优势。',
-    label: '行业',
-    numericValue: 7,
-    suffix: '+',
-  },
-  {
-    id: 'apps',
-    title: '由 VERT 驱动',
-    description: '目前，我们提供的应用广泛应用于各行各业及不同部门，解决实际场景中的问题。',
-    label: '应用',
-    numericValue: 100,
-    suffix: '+',
-  },
-];
 
 const infoVariants: Variants = {
   hidden: { opacity: 0, y: 16 },
@@ -70,14 +44,46 @@ const CountUpNumber: React.FC<{ end: number; suffix: string; inView: boolean }> 
       initial="hidden"
       animate={inView ? 'visible' : 'hidden'}
     >
-      {value}{suffix}
+      {value}
+      {suffix}
     </motion.span>
   );
 };
 
 const HomeData: React.FC = () => {
+  const { t } = useTranslation();
   const [inView, setInView] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+
+  const statCards = useMemo<StatCard[]>(
+    () => [
+      {
+        id: 'team',
+        title: t('home.data.teamTitle'),
+        description: t('home.data.teamDesc'),
+        label: t('home.data.teamLabel'),
+        numericValue: 40,
+        suffix: '+',
+      },
+      {
+        id: 'industry',
+        title: t('home.data.industryTitle'),
+        description: t('home.data.industryDesc'),
+        label: t('home.data.industryLabel'),
+        numericValue: 7,
+        suffix: '+',
+      },
+      {
+        id: 'apps',
+        title: t('home.data.appsTitle'),
+        description: t('home.data.appsDesc'),
+        label: t('home.data.appsLabel'),
+        numericValue: 100,
+        suffix: '+',
+      },
+    ],
+    [t]
+  );
 
   useEffect(() => {
     const el = sectionRef.current;
@@ -104,19 +110,16 @@ const HomeData: React.FC = () => {
       viewport={{ once: true, amount: 0.4 }}
     >
       <div className="home-data__inner">
-        <motion.header
-          className="home-data__header"
-          variants={infoVariants}
-        >
-          <h2 className="home-data__title">为企业成功奠定坚实 AI 基石</h2>
+        <motion.header className="home-data__header" variants={infoVariants}>
+          <h2 className="home-data__title">{t('home.data.title')}</h2>
           <p className="home-data__subtitle">
-            企业实现 AI 转型，需要的不仅仅是工具，更是坚实可靠的基础设施。
-            我们提供可扩展的基础设施、细粒度的访问控制以及跨部门的无缝集成能力，帮助企业成功实现 AI 转型。
+            {t('home.data.subtitle1')}
+            {t('home.data.subtitle2')}
           </p>
         </motion.header>
 
         <div className="home-data__cards">
-          {STAT_CARDS.map((card) => (
+          {statCards.map((card) => (
             <motion.article
               key={card.id}
               className="home-data__card"
@@ -124,21 +127,14 @@ const HomeData: React.FC = () => {
               whileInView="visible"
               viewport={{ once: true, amount: 0.4 }}
             >
-              <motion.div
-                className="home-data__card-info"
-                variants={infoVariants}
-              >
+              <motion.div className="home-data__card-info" variants={infoVariants}>
                 <h3 className="home-data__card-title">{card.title}</h3>
                 <p className="home-data__card-desc">{card.description}</p>
               </motion.div>
 
               <div className="home-data__stat">
                 <span className="home-data__stat-label">{card.label}</span>
-                <CountUpNumber
-                  end={card.numericValue}
-                  suffix={card.suffix}
-                  inView={inView}
-                />
+                <CountUpNumber end={card.numericValue} suffix={card.suffix} inView={inView} />
               </div>
             </motion.article>
           ))}

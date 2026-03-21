@@ -1,226 +1,425 @@
-export default {
-  // Common
+const enUS = {
   common: {
-    freeConsult: 'Free Consult',
-    freeTrial: 'Free Trial',
-    learnMore: 'Learn More',
-    viewDetails: 'View Details',
-    download: 'Download',
-    contact: 'Contact Us',
-    phone: 'Phone',
-    email: 'Email',
+    ctaStart: 'Get Started',
+    becomePartner: 'Become a Partner',
+    languageCurrentZh: 'Simplified Chinese',
+    languageCurrentEn: 'English',
+  },
+  layout: {
+    header: {
+      nav: {
+        home: 'Home',
+        fde: 'FDE Solutions',
+        maas: 'MAAS',
+        products: 'Products',
+        about: 'About Us',
+      },
+      navAria: 'Primary Navigation',
+      languageAria: 'Toggle language',
+      miniCta: 'Get Started',
+    },
+    floating: {
+      wechatQrAlt: 'WeChat QR Code',
+      wechatQrHint: 'Scan to add WeChat',
+      wechatConsult: 'WeChat Consultation',
+      phoneConsult: 'Phone Consultation',
+      demo: 'Demo',
+      backToTop: 'Back to Top',
+    },
+    footer: {
+      ctaTitle: 'Ready for the next generation of AI applications?',
+      ctaDescLine1: 'Integrate RAG pipelines, rich integrations, and complete observability in one place,',
+      ctaDescLine2: 'so you can launch production-grade AI agents without heavy overhead.',
+      qrLabel: 'WeChat',
+      contactTitle: 'Contact Us',
+      phone: 'Phone: 18751969612',
+      email: 'Email: m278398343@163.com',
+      addressLine1: 'Address: No.6 Baoxing Road, Haiwang Community, Xin’an Street, Bao’an District, Shenzhen',
+      addressLine2: 'Haina Baichuan Building B, 6F',
+      copyright: '© 2025 Breakthrough Energy, LLC. All Rights Reserved',
+    },
+  },
+  messageBoard: {
+    closeAria: 'Close',
+    qrAlt: 'WeChat QR Code',
+    qrText: 'Scan to add enterprise WeChat and get product solutions',
+    title: 'Leave your contact details and our consultant will reach out shortly',
+    namePlaceholder: 'Name',
+    companyPlaceholder: 'Company',
+    phonePlaceholder: 'Phone',
     submit: 'Submit',
-    cancel: 'Cancel',
+    submitting: 'Submitting…',
+    success: 'Submitted successfully. We will contact you soon.',
   },
-  
-  // Navigation
-  nav: {
-    products: 'Products',
-    solutions: 'Solutions',
-    cases: 'Cases',
-    resources: 'Resources & Services',
-    about: 'About VERT.AI',
-    fde: 'FDE Mode',
+  home: {
+    video: {
+      title: 'Build an enterprise digital employee incubation platform',
+      videoUnsupported: 'Your browser does not support video playback.',
+    },
+    itemShow: {
+      title: 'Turn AI ideas into reality and leap from concept to production',
+      workflowTitle: 'Build powerful workflows in seconds',
+      workflowSubtitle: 'Use visual drag-and-drop to build flexible and efficient AI applications and workflows.',
+      modelsTitle: 'Seamlessly connect global foundation models',
+      modelsSubtitle: 'Connect mainstream global models and start with one-click configuration.',
+      publishTitle: 'One-click publishing',
+      publishSubtitle: 'No backend complexity required. Multiple publishing options fit different needs.',
+      shareTitle: 'Share and co-build',
+      shareSubtitle: 'Support workflow composition and nesting to boost community sharing and team collaboration.',
+    },
+    subject: {
+      label: 'Out of the box, production ready',
+      keyword1: 'Flexible Extension',
+      keyword2: 'Reliable Stability',
+      keyword3: 'Security Assurance',
+      desc1: 'VERT calmly handles traffic growth and changing requirements with a solid foundation,',
+      desc2: 'ensuring you can operate with confidence and peace of mind,',
+      desc3: 'and protecting your core data assets with enterprise-grade security.',
+    },
+    data: {
+      title: 'Build a solid AI foundation for enterprise success',
+      subtitle1: 'Successful AI transformation requires more than tools. It requires dependable infrastructure.',
+      subtitle2: 'We provide scalable infrastructure, fine-grained access control, and cross-team seamless integration to drive successful AI transformation.',
+      teamTitle: 'Grow with your team',
+      teamDesc: 'Help every team accelerate from idea to launch, and efficiently build, deploy, and scale AI applications.',
+      teamLabel: 'Teams',
+      industryTitle: 'Trusted by industry leaders',
+      industryDesc: 'Deliver reliable solutions across industries, from semiconductor manufacturing to biopharma, helping customers gain a competitive edge.',
+      industryLabel: 'Industries',
+      appsTitle: 'Powered by VERT',
+      appsDesc: 'Our applications are already widely used across industries and departments to solve real-world problems.',
+      appsLabel: 'Applications',
+    },
+    companyDetail: {
+      title: 'They have already transformed their business with us',
+      videoUnsupported: 'Your browser does not support video playback.',
+      switchGroupAria: 'Switch company case',
+      switchToCase: 'Switch to case {{index}}',
+      stat1: 'Input Efficiency',
+      stat2: 'Recognition Rate',
+      stat3: 'Q&A Rate',
+      statResponse: 'Response Efficiency',
+      statSatisfaction: 'Satisfaction',
+      statCostSave: 'Cost Reduction',
+      statQaAccuracy: 'QA Accuracy',
+      statCapacity: 'Capacity Improvement',
+      statForecast: 'Failure Prediction',
+      statConversion: 'Conversion Lift',
+      statInventory: 'Inventory Optimization',
+      statRetention: 'Customer Retention',
+      statOperation: 'Operational Efficiency',
+      statLoss: 'Loss Reduction',
+      statReplenish: 'Replenishment Accuracy',
+      statSalesGrowth: 'Sales Growth',
+      statAcquisition: 'Acquisition Cost',
+      statRepurchase: 'Repurchase Rate',
+    },
+    brand: {
+      jinying: 'Golden Eagle',
+      toa: 'TOA Yingteng',
+      skieber: 'SKIEER',
+      gmart: 'Gmart Golden Eagle',
+    },
   },
-  
-  // Hero Section
-  hero: {
-    title: 'AI-Driven Vertical Scenario Solutions',
-    subtitle: 'Make Business Work, Make Decisions Smarter',
-    description: 'Deep into customer companies, through the FDE full-process service model, from consulting and R&D to deployment and operation, providing one-stop solutions to real business problems',
-    badge: 'Professional AI Solution Provider',
+  about: {
+    main: {
+      title: 'About VERT',
+      desc: 'VERT.AI serves medium and large enterprises, institutions, and data-intensive organizations worldwide with heterogeneous data integration, analysis and modeling, and large-model deployment, focused on enterprise AI digital employee R&D and implementation.',
+      cta: 'Get Started',
+    },
+    descript: {
+      title: 'Core Competencies of Our Team',
+      col1Title: 'Focused on AI R&D and enterprise applications',
+      columnOneItems: [
+        { label: 'VERT.FDE', value: 'On-site delivery and deep implementation team' },
+        { label: 'VERT.MAAS', value: 'Vertical scenario AI Agent plugins (digital employees)' },
+        { label: 'VERT.Flow AI', value: 'Application development platform (enterprise AI app platform)' },
+        { label: 'VERT.Insight', value: 'Data foundation (enterprise data integration and governance)' },
+        { label: 'VERT.Core', value: 'Cloud-native platform (DevOps and cross-environment deployment)' },
+      ],
+      col2Title: 'Industry implementation experience',
+      col2Text: 'Our team and self-developed software support Chinese commercial enterprises and leading medical institutions, enabling real-time AI-driven decisions across management, production floors, and frontline healthcare.',
+      col3Title: 'Team composition',
+      col3Text: 'The core team has years of enterprise AI deployment and data governance experience, with talent from Alibaba, ByteDance, and Baidu. Product and R&D staff account for over 90%, and core technical members are master’s and PhD graduates.',
+    },
   },
-  
-  // Partners
-  partners: {
-    title: 'Partners',
-    subtitle: 'Thanks to our trusted partners for their support',
-  },
-  
-  // Products
-  products: {
-    title: 'VERT.AI Core Products',
-    description: 'Provide one-stop AI solutions for enterprises',
-  },
-
-  // Plugins
-  plugins: {
-    title: 'Massive Plugins, Plug and Play',
-    subtitle: 'Covers multiple scenarios such as office, AI capabilities, data processing, integrated without development',
-    center: 'Plugin Center',
-    centerEn: 'Plugin Center',
-    pdfReader: 'PDF Reader',
-    searchApi: 'SearchAPI',
-    chatAi: 'Chat AI',
-    soon: 'SOON!',
-    dcpServer: 'DCP server',
-    formulaModel: 'Formula Model Service',
-    agentSql: 'AgentSQL',
-    privateBot: 'Private Deployment Bot',
-    ppt: 'PPT',
-    shareAi: 'Share AI',
-    github: 'Github',
-    statPlugins: 'Total Plugins',
-    statUsage: 'Usage Count',
-    statDevelopers: 'Developers',
-    statEnterprises: 'Enterprise Users',
-  },
-
-  // Workflow
-  workflow: {
-    title: 'No-Code Workflow Engine, Stable & Easy',
-    subtitle: 'Drag-and-drop AI workflow building, visual execution logic, lower automation barriers',
-    feature1: 'Drag-and-drop visual orchestration, no coding required',
-    feature2: 'Supports conditional branches, loops and complex logic',
-    feature3: 'Real-time preview of execution results, quick debugging',
-    feature4: 'Rich template library, one-click to get started',
-    cta: 'Try Now',
-    statTemplates: 'Workflow Templates',
-    statDaily: 'Daily Executions',
-    statSuccess: 'Success Rate',
-  },
-
-  // Monitor / Debug
-  monitor: {
-    title: 'Real-time Debug Preview with Performance Monitoring',
-    subtitle: 'View API latency, error logs, debug parameters online, and locate issues quickly',
-    card1Title: 'Real-time Performance Monitoring',
-    card1Desc: 'Monitor response time, success rate and other key metrics',
-    card2Title: 'Online Debug Console',
-    card2Desc: 'View request logs and error stack in real time',
-    card3Title: 'Parameter Online Debug',
-    card3Desc: 'Edit request parameters visually, preview results instantly',
-    card4Title: 'Performance Analysis Report',
-    card4Desc: 'Generate detailed performance analysis and optimization suggestions',
-    statResponse: 'Avg Response Time',
-    statCoverage: 'Monitoring Coverage',
-    statLocate: 'Faster Issue Locating',
-  },
-
-  // Model Integration
-  model: {
-    title: 'General Large Model Integration',
-    subtitle: 'Quick integration with mainstream models, one-click access to top AI capabilities',
-    latency: 'Latency',
-    accuracy: 'Accuracy',
-    gpt4: 'OpenAI GPT-4',
-    gpt4Caps: 'Text Generation Code Assistance Multimodal',
-    claude: 'Claude 3',
-    claudeCaps: 'Long Text Understanding Analysis & Reasoning Creation',
-    deepseek: 'deepseek',
-    deepseekCaps: 'Text Generation Code Assistance Multimodal',
-    qianwen: 'Tongyi Qianwen',
-    qianwenCaps: 'Multilingual Multimodal Code Generation',
-    gemini: 'Gemini Pro',
-    geminiCaps: 'Reasoning Creativity Multimodal',
-    kimi: 'Kimi',
-    kimiCaps: 'Text Generation Code Assistance Multimodal',
-  },
-  
-  // Solutions
-  solutions: {
-    title: 'Respond to Complex Scenarios Quickly Build AI Solutions',
-    subtitle: 'Make AI More Efficient, Decisions Smarter',
-    viewSolutions: 'View Solutions',
-    downloadSolutions: 'Download Solutions',
-  },
-  
-  // FDE Mode
   fde: {
-    title: 'FDE Full Service Mode',
-    subtitle: 'One-stop Service: Consulting, R&D, Deployment, Operation & Maintenance',
-    consult: {
-      title: 'Consulting',
-      description: 'Deeply understand business needs and provide professional AI solution consulting',
+    main: {
+      title: 'Help enterprises step into the AI era faster',
+      desc: 'VERT deeply explores AI application potential, building stable workflows to rapidly develop, iterate, and deliver practical products. We empower commercial enterprises and leading medical institutions with real-time AI-driven decisions across management, production floors, and frontline healthcare.',
     },
-    develop: {
-      title: 'R&D',
-      description: 'Dispatch professional teams to customize AI products',
+    solution: {
+      title: 'Help enterprises break out of constraints',
+      subtitle: 'Our mission is to reduce subjective manual intervention, provide rational analysis and objective decisions based on data trends and AI computing power, and significantly improve productivity and efficiency while reducing costs.',
+      cards: {
+        delivery: {
+          title: 'On-site Delivery',
+          desc: 'Deploy senior engineers on-site to deeply embed into business processes and complete deployment, customization, and integration of VERT products.',
+        },
+        landing: {
+          title: 'Problem Decomposition and Delivery',
+          desc: 'Work closely with business teams to transform complex business problems into executable AI solutions and deliver from requirements to operations.',
+        },
+        custom: {
+          title: 'Customized Development and Data Integration',
+          desc: 'Build customized AI agents, workflows, and data governance modules on VERT core platform to solve industry-specific business pain points.',
+        },
+        empower: {
+          title: 'Enablement and Knowledge Transfer',
+          desc: 'Through training, documentation, and best practices, help client teams master product usage and operations for autonomous iteration.',
+        },
+      },
     },
-    deploy: {
-      title: 'Deployment',
-      description: 'Quickly deploy AI systems to ensure stable operation',
+    caseStudies: {
+      title: 'Enterprise AI Digital Employee Case Study',
+      company: 'Yingtang Zhikong',
+      industry: 'Manufacturing and Distribution',
+      intro: 'VERT.AI enterprise digital employees are not simple labor replacement, but a closed-loop value system built through heterogeneous data integration, model deployment, and industry algorithm customization.',
+      item1: 'Efficiency upgrade: core business efficiency improved by 50%+, with some scenarios exceeding 100%.',
+      item2: 'Cost upgrade: all categories reduced by 30%-80%, reducing compliance and decision risk.',
+      item3: 'Decision upgrade: from experience-driven to data-driven, from post-event review to real-time monitoring.',
     },
-    operate: {
-      title: 'Operation & Maintenance',
-      description: 'Continuous operation and maintenance support to ensure efficient system operation',
+    studiesDetail: {
+      aiServiceTitle: 'AI Service',
+      coreValueTitle: 'Core Value',
+      cards: [
+        {
+          key: 'service',
+          title: 'AI Customer Service (Enterprise-wide scenarios)',
+          tag: 'Pain Point',
+          pain: 'High-frequency inquiries consume manpower, responses are slow, and there is no full-time coverage.',
+          aiService: 'Integrates full-scenario knowledge and multi-turn guidance, online **7*24h**, with Q&A statistics and document recommendation.',
+          coreValue: '**AI replaces 60%** of high-frequency inquiries; response speed is seconds; **80%** of issues are closed by AI.',
+        },
+        {
+          key: 'legal',
+          title: 'AI Legal Consultation Expert',
+          tag: 'Pain Point',
+          pain: 'Manual contract review is error-prone and expensive; approval cycles are slow and communication cost is high.',
+          aiService: 'Real-time contract attachment and OA form checks, risk clause marking, and seamless OA integration for compliance alerts.',
+          coreValue: 'Critical element check error rate reduced to **0**; **50%** legal capacity released; single contract review time reduced by **50%+**.',
+        },
+        {
+          key: 'audit',
+          title: 'AI Management Audit (Group Management)',
+          tag: 'Business',
+          pain: 'Store performance manipulation and data distortion make manual auditing expensive and lagging.',
+          aiService: 'Computes benchmark values and performs **real-time comparison** with **automatic anomaly detection**.',
+          coreValue: 'Replaces manual auditing, **rebuilds assessment systems**, and closes the management value loop.',
+          isAudit: true,
+        },
+      ],
+    },
+    aiPlugins: {
+      title: 'AI Expert Plugin Matrix',
+      painTag: 'Pain Point',
+      aiServiceTitle: 'AI Service',
+      coreValueTitle: 'Core Value',
+      cards: [
+        {
+          key: 'aeon',
+          title: 'AEON',
+          subtitle: 'CDP Assistant (Private-domain operations)',
+          coverOverlay: true,
+          coverTextTop: 38,
+          pain: 'Private-domain systems have high operational barriers and training costs, with difficult SOP replication.',
+          painTextWidth: 582,
+          dividerWidth: 634,
+          aiTextWidth: 268,
+          coreValueWidth: 285,
+          aiService: [
+            { text: 'Three agents collaborate to deliver a ' },
+            { text: 'closed loop from insight to review', strong: true },
+            { text: ', and natural language lowers the operating threshold.' },
+          ],
+          coreValue: [
+            { text: 'Reduce ' },
+            { text: '50%', strong: true },
+            { text: ' training cost and ' },
+            { text: '30%', strong: true },
+            { text: ' manpower; campaign launch cycle shortened by ' },
+            { text: '80%', strong: true },
+            { text: '.' },
+          ],
+        },
+        {
+          key: 'yijiancai',
+          title: 'Yijiancai',
+          subtitle: 'Large Hospital Procurement',
+          coverTextTop: 40,
+          pain: 'Medical procurement is fragmented across channels, processes are inconsistent, and supervision is inefficient.',
+          painTextWidth: 590,
+          dividerWidth: 636,
+          aiTextWidth: 268,
+          coreValueWidth: 300,
+          aiService: [
+            { text: 'A ' },
+            { text: 'multi-agent collaboration', strong: true },
+            { text: ' architecture delivers integrated IM and a ' },
+            { text: 'full closed-loop process', strong: true },
+            { text: ' with standardized procurement.' },
+          ],
+          coreValue: [
+            { text: 'Reduce total procurement cost by ' },
+            { text: '40%', strong: true },
+            { text: ', manpower by ' },
+            { text: '35%', strong: true },
+            { text: ', improve collection efficiency by ' },
+            { text: '60%', strong: true },
+            { text: ', shorten project cycle by ' },
+            { text: '50%', strong: true },
+            { text: ', and improve risk detection to ' },
+            { text: '80%', strong: true },
+            { text: '.' },
+          ],
+        },
+      ],
+    },
+    algorithm: {
+      title: 'Enterprise Algorithm Solution Case',
+      company: 'Golden Eagle Group',
+      industry: 'Retail Commerce',
+      intro: 'Golden Eagle Group, a benchmark in retail commerce, implemented “100+ business nodes and 20+ agent scenarios” through VERT.AI, enabling full-chain AI upgrades in finance, legal, and property management.',
+      metricsAria: 'Algorithm implementation results',
+      metric1: 'Business Nodes',
+      metric2: 'Agent Scenarios',
+      metric3: 'Labor Cost Reduction',
+      prompt: 'Generate the January revenue report for me',
     },
   },
-  
-  // Customer Cases
-  cases: {
-    title: 'Leading Companies in Various Industries Are Using VERT.AI',
-    viewMore: 'View More Cases >',
-  },
-  
-  // Advantages
-  advantages: {
-    title: 'How VERT.AI Makes Business Work',
-    vertical: {
-      title: 'Vertical Scenarios',
-      description: 'Deep into industries, understand business, provide precise AI solutions',
+  maas: {
+    main: {
+      title: 'Expand impact without increasing budget',
+      desc: 'Powered by VERT, equip your team with expert-level precision at AI speed.',
+      openMessageAria: 'Open message panel',
+      typewriter: [
+        'Analyze the purchase order volume for the past week',
+        'Organize all files on my desktop and auto-classify them',
+        'Summarize inventory anomalies and replenishment suggestions into an actionable list',
+      ],
     },
-    ai: {
-      title: 'AI-Driven',
-      description: 'Use advanced AI technology to drive business innovation and growth',
+    aiModel: {
+      ariaLabel: 'Model ecosystem logo strip',
+      qwenAlt: 'Qwen',
     },
-    fde: {
-      title: 'FDE Mode',
-      description: 'Full series of services, from consulting to operation and maintenance, one-stop solution',
+    aiModelDetail: {
+      ariaLabel: 'VERT Router interface for AI tools and LLM list',
+      title: 'VERT Router Interface for AI Tools and LLM List',
+      cards: [
+        {
+          key: 'api',
+          title: 'One-stop API for all models',
+          description: 'Build customized AI agents, workflows, and data governance modules on VERT core platform to solve industry-specific pain points.',
+          imageAlt: 'One-stop API and multi-model adaptation',
+        },
+        {
+          key: 'cost',
+          title: 'Balanced cost and performance',
+          description: 'Flexibly adapt to diverse AI agents and quickly land business scenarios while balancing quality and cost control.',
+          imageAlt: 'Cost and performance balance illustration',
+        },
+        {
+          key: 'availability',
+          title: 'Higher availability',
+          description: 'Backed by VERT.Core cloud-native platform and Tencent Cloud partnership for stable model operations.',
+          imageAlt: 'High availability illustration',
+        },
+        {
+          key: 'local',
+          title: 'Local and private security',
+          description: 'Your data always belongs to you. Focused on local private deployment with full control and transparency.',
+          imageAlt: 'Local private security illustration',
+        },
+        {
+          key: 'landing',
+          title: 'From model to product, full-process delivery',
+          description: 'Curated agent marketplace, one-click access, and direct API integration into production workflows.',
+          imageAlt: 'Model-to-product full-process illustration',
+        },
+        {
+          key: 'web-search',
+          title: 'Web Search',
+          description: 'Three core modes with multi-engine aggregation for rapid retrieval of web content across scenarios.',
+          imageAlt: 'Web search capability illustration',
+        },
+        {
+          key: 'mcp',
+          title: 'MCP',
+          description: 'Universal adaptation interface for one-click tool connection and rich MCP ecosystem services.',
+          imageAlt: 'MCP tool connection illustration',
+        },
+        {
+          key: 'rag',
+          title: 'Knowledge Base (RAG)',
+          description: 'Fast full-chain construction from parsing and chunking to indexing and retrieval with high-precision recall.',
+          imageAlt: 'RAG workflow illustration',
+        },
+        {
+          key: 'fine-tuning',
+          title: 'Fine-tuning',
+          description: 'Business-aligned tuning with LoRA or full-parameter options for controlled ROI.',
+          imageAlt: 'Fine-tuning capability illustration',
+        },
+      ],
     },
   },
-  
-  // Resources
-  resources: {
-    title: 'Learning Resources',
-    subtitle: 'Deep frontier interactive exchange, learn AI application practices',
-  },
-  
-  // About main
-  aboutMain: {
-    title: 'About VERT',
-    description: 'VERT.AI provides heterogeneous data integration, analysis, modeling, and large model deployment for global medium and large enterprises, institutions, and data-intensive organizations, focusing on enterprise-grade AI "digital employees" for R&D and implementation.',
-    cta: 'Get Started',
-  },
-
-  // About - Core competencies
-  aboutDescript: {
-    title: "Our Team's Core Competencies",
-    col1Title: 'Focused on AI Technology R&D and Enterprise Applications',
-    fde: 'VERT.FDE: On-site delivery and in-depth implementation team',
-    maas: 'VERT.MAAS: Vertical scenario AI Agent plugin (digital employee)',
-    flowAi: 'VERT.Flow AI: Application development platform (enterprise-level AI application development platform)',
-    insight: 'VERT.Insight: Data foundation (enterprise-level data integration and governance platform)',
-    core: 'VERT.Core: Cloud-native platform (DevOps and cross-environment deployment platform)',
-    col2Title: 'Industrialized AI Enterprise Implementation Experience',
-    col2Text: 'Our team and self-developed software provide support for Chinese commercial enterprises and frontier medical institutions, empowering real-time AI-driven decision-making. Application scenarios cover all cutting-edge fields from enterprise management, production workshops to front-line medical care.',
-    col3Title: 'Team Member Composition',
-    col3Text: 'The core team has many years of experience in enterprise-level AI deployment and big data governance, all from Alibaba, ByteDance, and Baidu. Product and R&D personnel account for over 90%, and the core technical team members all hold master\'s and doctoral degrees.',
-  },
-
-  // Contact
-  contact: {
-    title: 'Consult AI Solutions Now',
-    subtitle: 'Start Your AI Application Experience',
-    form: {
-      name: 'Name',
-      company: 'Company',
-      position: 'Position',
-      phone: 'Phone',
-      email: 'Email',
-      requirement: 'Requirement Description',
-      submitSuccess: 'Submitted successfully! We will contact you as soon as possible',
-      submitError: 'Submission failed, please try again later',
+  products: {
+    flowwork: {
+      title: 'No-code workflow engine, stable and easy to use',
+      subtitle: 'Build AI workflows by drag-and-drop with visual execution logic and lower automation barriers',
+      features: [
+        { prefix: 'Drag-and-drop ', highlight: 'visual orchestration', suffix: ', no coding required' },
+        { prefix: 'Supports ', highlight: 'branching and loops', suffix: ' for complex logic' },
+        { prefix: '', highlight: 'Real-time preview', suffix: ' for quick debugging' },
+        { prefix: 'Rich ', highlight: 'template library', suffix: ', start with one click' },
+      ],
+      cta: 'Try Now',
+      imageAria: 'Workflow illustration placeholder',
+      stat1: 'Workflow Templates',
+      stat2: 'Daily Executions',
+      stat3: 'Success Rate',
     },
-  },
-  
-  // Footer
-  footer: {
-    contact: 'Contact Us',
-    phone: 'Phone',
-    email: 'Email',
-    copyright: '@Copyright 2024 VERT.AI',
-    privacy: 'Privacy Policy',
-    links: 'Links',
+    monitor: {
+      title: 'Real-time debugging preview with performance monitoring',
+      subtitle: 'View API latency and error logs in real time, debug parameters online, and locate issues quickly',
+      perfPlaceholder: 'Real-time performance monitoring placeholder',
+      consolePlaceholder: 'Online debugging console placeholder',
+      paramPlaceholder: 'Parameter debugging placeholder',
+      reportPlaceholder: 'Performance analysis report placeholder',
+      stat1: 'Average Response Time',
+      stat2: 'Monitoring Coverage',
+      stat3: 'Issue Localization Speed',
+    },
+    model: {
+      title: 'General model integration capability',
+      subtitle: 'Rapidly match and integrate mainstream models with one-click access to top AI capability',
+      latency: 'Latency',
+      accuracy: 'Accuracy',
+      models: [
+        { name: 'OpenAI GPT-4', capabilities: ['Text Generation', 'Coding Assistant', 'Multimodal'] },
+        { name: 'Claude 3', capabilities: ['Long-context Understanding', 'Analytical Reasoning', 'Creation'] },
+        { name: 'DeepSeek', capabilities: ['Text Generation', 'Coding Assistant', 'Multimodal'] },
+        { name: 'Qwen', capabilities: ['Multilingual', 'Multimodal', 'Code Generation'] },
+        { name: 'Gemini Pro', capabilities: ['Reasoning', 'Creativity', 'Multimodal'] },
+        { name: 'Kimi', capabilities: ['Text Generation', 'Coding Assistant', 'Multimodal'] },
+      ],
+    },
+    plugins: {
+      title: 'Massive plugins, plug and play',
+      subtitle: 'Covering office, AI capabilities, and data processing scenarios with no extra development',
+      diagramAria: 'Plugin relationship diagram',
+      centerTitle: 'Plugin Center',
+      centerSubtitle: 'Plugin Center',
+      stat1: 'Total Plugins',
+      stat2: 'Usage Count',
+      stat3: 'Developers',
+      stat4: 'Enterprise Users',
+      nodePdf: 'PDF Processing',
+      nodeJson: 'JSON Processing',
+      nodeOcr: 'OCR Recognition Service',
+      nodeWechatBot: 'Enterprise WeChat Bot',
+    },
   },
 };
+
+export default enUS;

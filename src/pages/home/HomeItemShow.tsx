@@ -1,5 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { useWheelScroll } from '../../hooks/useWheelScroll';
 import { getAssetPath } from '../../utils/path';
 import './HomeItemShow.css';
@@ -10,61 +11,62 @@ type Item = {
   id: string;
   title: string;
   subtitle: string;
-  description: string;
   image: string;
 };
 
-const items: Item[] = [
-  {
-    id: 'workflow',
-    title: '分秒之内，构建强大工作流',
-    subtitle: '通过可视化拖拽操作，让你直观构建灵活高效的AI应用和工作流。',
-    description: '',
-    image: '/images/home/keyboard.png',
-  },
-  {
-    id: 'models',
-    title: '无缝接入全球大模型',
-    subtitle: '轻松接入全球主流大模型，一键配置即可使用。',
-    description: '',
-    image: '/images/home/keyboard.png',
-  },
-  {
-    id: 'publish',
-    title: '一键发布',
-    subtitle: '无需处理后端复杂性，多种发布选项满足你的不同需求。',
-    description: '',
-    image: '/images/home/keyboard.png',
-  },
-  {
-    id: 'share',
-    title: '分享与共建',
-    subtitle: '支持工作流的组合和嵌套使用，促进社区共享与团队协作。',
-    description: '',
-    image: '/images/home/keyboard.png',
-  },
-];
-
 const HomeItemShow: React.FC = () => {
-  const { sectionRef, activeIndex, setActiveIndex, isLocked } = useWheelScroll(
-    items.length,
-    { scrollThreshold: 120, lockMode: true }
+  const { t } = useTranslation();
+
+  const items = useMemo<Item[]>(
+    () => [
+      {
+        id: 'workflow',
+        title: t('home.itemShow.workflowTitle'),
+        subtitle: t('home.itemShow.workflowSubtitle'),
+        image: '/images/home/keyboard.png',
+      },
+      {
+        id: 'models',
+        title: t('home.itemShow.modelsTitle'),
+        subtitle: t('home.itemShow.modelsSubtitle'),
+        image: '/images/home/keyboard.png',
+      },
+      {
+        id: 'publish',
+        title: t('home.itemShow.publishTitle'),
+        subtitle: t('home.itemShow.publishSubtitle'),
+        image: '/images/home/keyboard.png',
+      },
+      {
+        id: 'share',
+        title: t('home.itemShow.shareTitle'),
+        subtitle: t('home.itemShow.shareSubtitle'),
+        image: '/images/home/keyboard.png',
+      },
+    ],
+    [t]
   );
+
+  const { sectionRef, activeIndex, setActiveIndex, isLocked } = useWheelScroll(items.length, {
+    scrollThreshold: 120,
+    lockMode: true,
+    lockEnterThreshold: 0.78,
+    lockExitThreshold: 0.58,
+  });
+
   const activeItem = items[activeIndex] ?? items[0];
   const listRef = useRef<HTMLDivElement>(null);
   const axisRef = useRef<HTMLDivElement>(null);
   const iconRef = useRef<HTMLImageElement>(null);
   const titleRefs = useRef<(HTMLSpanElement | null)[]>([]);
-  const activeIndexRef = useRef(activeIndex);
-  activeIndexRef.current = activeIndex;
   const [anchorTop, setAnchorTop] = useState(0);
   const [fillHeightPercent, setFillHeightPercent] = useState(0);
 
-  const updateAnchorPosition = () => {
+  const updateAnchorPosition = useCallback(() => {
     const list = listRef.current;
     const axis = axisRef.current;
     const icon = iconRef.current;
-    const idx = activeIndexRef.current;
+    const idx = activeIndex;
     const titleEl = titleRefs.current[idx];
     if (!list || !titleEl || !axis || !icon) return;
     const listRect = list.getBoundingClientRect();
@@ -81,7 +83,7 @@ const HomeItemShow: React.FC = () => {
     const fillBottomPx = Math.max(0, iconTopPx + 4);
     const fillPct = Math.min(100, (fillBottomPx / axisHeight) * 100);
     setFillHeightPercent(fillPct);
-  };
+  }, [activeIndex]);
 
   useEffect(() => {
     updateAnchorPosition();
@@ -89,18 +91,13 @@ const HomeItemShow: React.FC = () => {
     const list = listRef.current;
     if (list) ro.observe(list);
     return () => ro.disconnect();
-  }, [activeIndex]);
+  }, [updateAnchorPosition]);
 
   return (
-    <section
-      ref={sectionRef}
-      className={`home-item-show ${isLocked ? 'home-item-show--locked' : ''}`}
-    >
+    <section ref={sectionRef} className={`home-item-show ${isLocked ? 'home-item-show--locked' : ''}`}>
       <div className="home-item-show__inner">
         <header className="home-item-show__header">
-          <h2 className="home-item-show__title">
-            将 AI 创意变为现实，实现从构想到生产的"飞跃"
-          </h2>
+          <h2 className="home-item-show__title">{t('home.itemShow.title')}</h2>
         </header>
 
         <div className="home-item-show__content">
@@ -122,12 +119,7 @@ const HomeItemShow: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <div
-                className="home-item-show__axis-icon"
-                style={{
-                  top: `${anchorTop}%`,
-                }}
-              >
+              <div className="home-item-show__axis-icon" style={{ top: `${anchorTop}%` }}>
                 <img
                   ref={iconRef}
                   className="home-item-show__axis-icon-img"
@@ -141,19 +133,17 @@ const HomeItemShow: React.FC = () => {
                 <button
                   key={item.id}
                   type="button"
-                  className={`home-item-show__item ${
-                    index === activeIndex ? 'home-item-show__item--active' : ''
-                  }`}
+                  className={`home-item-show__item ${index === activeIndex ? 'home-item-show__item--active' : ''}`}
                   onMouseEnter={() => setActiveIndex(index)}
                   onClick={() => setActiveIndex(index)}
                 >
                   <div className="home-item-show__item-text">
                     <div className="home-item-show__item-title-row">
                       <span
-                        ref={(el) => { titleRefs.current[index] = el; }}
-                        className={`home-item-show__item-title ${
-                          index === activeIndex ? 'home-item-show__item-title--active' : ''
-                        }`}
+                        ref={(el) => {
+                          titleRefs.current[index] = el;
+                        }}
+                        className={`home-item-show__item-title ${index === activeIndex ? 'home-item-show__item-title--active' : ''}`}
                       >
                         {item.title}
                       </span>

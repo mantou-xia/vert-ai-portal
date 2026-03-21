@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getAssetPath } from '../utils/path';
 import './MessageBoard.css';
 
@@ -16,6 +17,7 @@ interface FormState {
 const QR_SRC = getAssetPath('/images/home/qr_code.png');
 
 const MessageBoard: React.FC<MessageBoardProps> = ({ open, onClose }) => {
+  const { t } = useTranslation();
   const [form, setForm] = useState<FormState>({
     name: '',
     company: '',
@@ -24,6 +26,17 @@ const MessageBoard: React.FC<MessageBoardProps> = ({ open, onClose }) => {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const dialogRef = useRef<HTMLDivElement | null>(null);
+
+  const handleClose = useCallback(() => {
+    setSubmitting(false);
+    setSuccess(false);
+    setForm({
+      name: '',
+      company: '',
+      phone: '',
+    });
+    onClose();
+  }, [onClose]);
 
   useEffect(() => {
     if (!open) return;
@@ -38,18 +51,7 @@ const MessageBoard: React.FC<MessageBoardProps> = ({ open, onClose }) => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [open]);
-
-  const handleClose = () => {
-    setSubmitting(false);
-    setSuccess(false);
-    setForm({
-      name: '',
-      company: '',
-      phone: '',
-    });
-    onClose();
-  };
+  }, [open, handleClose]);
 
   const handleChange =
     (field: keyof FormState) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,7 +80,7 @@ const MessageBoard: React.FC<MessageBoardProps> = ({ open, onClose }) => {
         <button
           type="button"
           className="message-board__close"
-          aria-label="关闭"
+          aria-label={t('messageBoard.closeAria')}
           onClick={handleClose}
         >
           ×
@@ -90,27 +92,27 @@ const MessageBoard: React.FC<MessageBoardProps> = ({ open, onClose }) => {
             <div className="message-board__qr-inner">
               <img
                 src={QR_SRC}
-                alt="微信二维码"
+                alt={t('messageBoard.qrAlt')}
                 className="message-board__qr-img"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}
               />
             </div>
-            <p className="message-board__qr-text">扫码添加企业微信，获取产品方案</p>
+            <p className="message-board__qr-text">{t('messageBoard.qrText')}</p>
           </div>
         </div>
 
         <div className="message-board__right">
           {!success ? (
             <form className="message-board__form" onSubmit={handleSubmit}>
-              <h2 className="message-board__title">您也可以留下联系方式，我们的顾问将尽快联系您</h2>
+              <h2 className="message-board__title">{t('messageBoard.title')}</h2>
               <div className="message-board__fields">
                 <div className="message-board__field">
                   <input
                     value={form.name}
                     onChange={handleChange('name')}
-                    placeholder="姓名/称呼"
+                    placeholder={t('messageBoard.namePlaceholder')}
                     className="message-board__input"
                   />
                 </div>
@@ -118,7 +120,7 @@ const MessageBoard: React.FC<MessageBoardProps> = ({ open, onClose }) => {
                   <input
                     value={form.company}
                     onChange={handleChange('company')}
-                    placeholder="公司名称"
+                    placeholder={t('messageBoard.companyPlaceholder')}
                     className="message-board__input"
                   />
                 </div>
@@ -126,7 +128,7 @@ const MessageBoard: React.FC<MessageBoardProps> = ({ open, onClose }) => {
                   <input
                     value={form.phone}
                     onChange={handleChange('phone')}
-                    placeholder="联系电话"
+                    placeholder={t('messageBoard.phonePlaceholder')}
                     className="message-board__input"
                   />
                 </div>
@@ -136,13 +138,13 @@ const MessageBoard: React.FC<MessageBoardProps> = ({ open, onClose }) => {
                 className="message-board__submit"
                 disabled={submitting || !form.name.trim() || !form.phone.trim()}
               >
-                {submitting ? '提交中…' : '提交'}
+                {submitting ? t('messageBoard.submitting') : t('messageBoard.submit')}
               </button>
             </form>
           ) : (
             <div className="message-board__success">
               <div className="message-board__success-icon">✓</div>
-              <p className="message-board__success-text">提交成功，我们将尽快与您取得联系</p>
+              <p className="message-board__success-text">{t('messageBoard.success')}</p>
             </div>
           )}
         </div>
@@ -152,4 +154,3 @@ const MessageBoard: React.FC<MessageBoardProps> = ({ open, onClose }) => {
 };
 
 export default MessageBoard;
-

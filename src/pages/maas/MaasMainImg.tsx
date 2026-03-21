@@ -1,13 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import MessageBoard from '../MessageBoard';
 import { getAssetPath } from '../../utils/path';
 import './MaasMainImg.css';
-
-const TYPEWRITER_TEXTS = [
-  '帮我分析近一周的采购订单的规模',
-  '帮我自动整理桌面上的所有文件，并进行自动归类',
-  '把库存异常与补货建议整理成可执行清单',
-];
 
 const TYPE_SPEED_MS = 80;
 const DELETE_SPEED_MS = 40;
@@ -307,13 +302,18 @@ const AnimatedTechBackground: React.FC = () => {
 };
 
 const MaasMainImg: React.FC = () => {
+  const { t } = useTranslation();
   const [textIndex, setTextIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [isMessageOpen, setIsMessageOpen] = useState(false);
+  const typewriterTexts = useMemo(
+    () => (t('maas.main.typewriter', { returnObjects: true }) as string[]) ?? [],
+    [t]
+  );
 
   useEffect(() => {
-    const currentText = TYPEWRITER_TEXTS[textIndex];
+    const currentText = typewriterTexts[textIndex] ?? '';
     let timeoutId: number;
 
     if (!isDeleting) {
@@ -331,14 +331,14 @@ const MaasMainImg: React.FC = () => {
         setDisplayText(currentText.slice(0, displayText.length - 1));
       }, DELETE_SPEED_MS);
     } else {
-      timeoutId = window.setTimeout(() => {
-        setIsDeleting(false);
-        setTextIndex((prev) => (prev + 1) % TYPEWRITER_TEXTS.length);
-      }, NEXT_TEXT_DELAY_MS);
+        timeoutId = window.setTimeout(() => {
+          setIsDeleting(false);
+          setTextIndex((prev) => (prev + 1) % Math.max(1, typewriterTexts.length));
+        }, NEXT_TEXT_DELAY_MS);
     }
 
     return () => window.clearTimeout(timeoutId);
-  }, [displayText, isDeleting, textIndex]);
+  }, [displayText, isDeleting, textIndex, typewriterTexts]);
 
   const openMessageBoard = () => setIsMessageOpen(true);
   const closeMessageBoard = () => setIsMessageOpen(false);
@@ -350,9 +350,9 @@ const MaasMainImg: React.FC = () => {
       </div>
 
       <div className="maas-main-img__content">
-        <h1 className="maas-main-img__title">无需增加额外预算，即可扩大影响力</h1>
+        <h1 className="maas-main-img__title">{t('maas.main.title')}</h1>
         <p className="maas-main-img__desc">
-          由VERT提供支持，以人工智能的速度为您配备专家级的精准能力。
+          {t('maas.main.desc')}
         </p>
 
         <div
@@ -377,7 +377,7 @@ const MaasMainImg: React.FC = () => {
           <button
             type="button"
             className="maas-main-img__input-btn"
-            aria-label="打开留言面板"
+            aria-label={t('maas.main.openMessageAria')}
             onClick={(event) => {
               event.stopPropagation();
               openMessageBoard();

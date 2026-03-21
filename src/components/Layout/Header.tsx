@@ -1,10 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Layout } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { routes } from '../../config/routes';
 import MessageBoard from '../../pages/MessageBoard';
 import CTAButton from '../common/CTAButton';
 import { getAssetPath } from '../../utils/path';
+import { useAppLanguage } from '../../hooks/useAppLanguage';
 import './Header.css';
 
 const { Header: AntHeader } = Layout;
@@ -20,6 +22,8 @@ type HeaderMenuItem = {
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
+  const { language, toggleLanguage } = useAppLanguage();
   const [isMiniHeader, setIsMiniHeader] = useState(false);
   const [isMessageOpen, setIsMessageOpen] = useState(false);
   const miniStateRef = useRef(false);
@@ -67,13 +71,16 @@ const Header: React.FC = () => {
     };
   }, [location.pathname]);
 
-  const menuItems: HeaderMenuItem[] = [
-    { key: 'home', label: '首页', path: routes.home },
-    { key: 'fde-solutions', label: 'FDE解决方案', path: routes.fde },
-    { key: 'maas', label: 'MAAS', path: routes.maas },
-    { key: 'products', label: '产品', path: routes.products },
-    { key: 'about', label: '关于我们', path: routes.about },
-  ];
+  const menuItems = useMemo<HeaderMenuItem[]>(
+    () => [
+      { key: 'home', label: t('layout.header.nav.home'), path: routes.home },
+      { key: 'fde-solutions', label: t('layout.header.nav.fde'), path: routes.fde },
+      { key: 'maas', label: t('layout.header.nav.maas'), path: routes.maas },
+      { key: 'products', label: t('layout.header.nav.products'), path: routes.products },
+      { key: 'about', label: t('layout.header.nav.about'), path: routes.about },
+    ],
+    [t]
+  );
 
   const selectedMenuKey = menuItems.find((item) => {
     if (item.path === routes.home) {
@@ -81,6 +88,8 @@ const Header: React.FC = () => {
     }
     return location.pathname === item.path || location.pathname.startsWith(`${item.path}/`);
   })?.key;
+
+  const languageLabel = language === 'zh-CN' ? t('common.languageCurrentZh') : t('common.languageCurrentEn');
 
   return (
     <>
@@ -93,7 +102,7 @@ const Header: React.FC = () => {
 
             <div className="header-center-group">
               <div className="header-nav-pill">
-                <nav className="header-menu" aria-label="主导航">
+                <nav className="header-menu" aria-label={t('layout.header.navAria')}>
                   {menuItems.map((item) => (
                     <button
                       key={item.key}
@@ -107,8 +116,13 @@ const Header: React.FC = () => {
                 </nav>
               </div>
 
-              <button type="button" className="header-language-btn" aria-label="语言设置">
-                <img src={getAssetPath('/images/icons/网络.svg')} alt="" />
+              <button
+                type="button"
+                className="header-language-btn"
+                aria-label={languageLabel}
+                onClick={toggleLanguage}
+              >
+                <span>{languageLabel}</span>
               </button>
             </div>
 
@@ -123,7 +137,7 @@ const Header: React.FC = () => {
                 <img src={getAssetPath('/images/home/logo.png')} alt="VERT" />
               </div>
               <CTAButton className="header-mini-cta" onClick={() => setIsMessageOpen(true)}>
-                立即开始
+                {t('layout.header.miniCta')}
               </CTAButton>
             </div>
           </div>

@@ -1,22 +1,27 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Layout } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { routes } from '../../config/routes';
 import { getAssetPath } from '../../utils/path';
 import './Footer.css';
 
 const { Footer: AntFooter } = Layout;
 
-const FOOTER_NAV = [
-  { label: '首页', path: routes.home },
-  { label: 'FDE解决方案', path: routes.fde },
-  { label: 'MAAS', path: routes.maas },
-  { label: '产品', path: routes.products },
-  { label: '关于我们', path: routes.about },
-] as const;
-
 const Footer: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  const footerNav = useMemo(
+    () => [
+      { label: t('layout.header.nav.home'), path: routes.home },
+      { label: t('layout.header.nav.fde'), path: routes.fde },
+      { label: t('layout.header.nav.maas'), path: routes.maas },
+      { label: t('layout.header.nav.products'), path: routes.products },
+      { label: t('layout.header.nav.about'), path: routes.about },
+    ],
+    [t]
+  );
 
   return (
     <AntFooter className="app-footer">
@@ -26,7 +31,7 @@ const Footer: React.FC = () => {
             <img src={getAssetPath('/images/home/logo_write.png')} alt="" />
           </div>
           <nav className="app-footer__nav">
-            {FOOTER_NAV.map((item, index) => (
+            {footerNav.map((item, index) => (
               <span key={item.path}>
                 {index > 0 && <span className="app-footer__nav-sep">|</span>}
                 <button
@@ -43,12 +48,11 @@ const Footer: React.FC = () => {
 
         <div className="app-footer__middle">
           <div className="app-footer__cta">
-            <h2 className="app-footer__cta-title">
-              准备好迎接下一代AI应用了吗？
-            </h2>
+            <h2 className="app-footer__cta-title">{t('layout.footer.ctaTitle')}</h2>
             <p className="app-footer__cta-desc">
-            集RAG pipeline、丰富的集成和全面可观测性于一体，<br />
-            轻松上线可投产的AI Agents，无需繁琐操作。
+              {t('layout.footer.ctaDescLine1')}
+              <br />
+              {t('layout.footer.ctaDescLine2')}
             </p>
           </div>
           <div className="app-footer__contact">
@@ -57,22 +61,22 @@ const Footer: React.FC = () => {
                 <img
                   className="app-footer__qr-img"
                   src={getAssetPath('/images/icons/home/微信号二维码.png')}
-                  alt="微信号"
+                  alt={t('layout.footer.qrLabel')}
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
                   }}
                 />
-                <span className="app-footer__qr-label">微信号</span>
+                <span className="app-footer__qr-label">{t('layout.footer.qrLabel')}</span>
               </div>
               <div className="app-footer__contact-info">
-                <h3 className="app-footer__contact-title">联系我们</h3>
+                <h3 className="app-footer__contact-title">{t('layout.footer.contactTitle')}</h3>
                 <div className="app-footer__contact-list">
-                  <p>联系电话：18751969612</p>
-                  <p>邮箱地址：m278398343@163.com</p>
+                  <p>{t('layout.footer.phone')}</p>
+                  <p>{t('layout.footer.email')}</p>
                   <p>
-                    公司地址：深圳市宝安区新安街道海旺社区宝兴路6号
+                    {t('layout.footer.addressLine1')}
                     <br />
-                    海纳百川大厦B座6层
+                    {t('layout.footer.addressLine2')}
                   </p>
                 </div>
               </div>
@@ -81,9 +85,7 @@ const Footer: React.FC = () => {
         </div>
 
         <div className="app-footer__bottom">
-          <p className="app-footer__copyright">
-            © 2025 Breakthrough Energy, LLC. All Rights Reserved
-          </p>
+          <p className="app-footer__copyright">{t('layout.footer.copyright')}</p>
         </div>
       </div>
     </AntFooter>

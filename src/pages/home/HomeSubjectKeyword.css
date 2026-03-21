@@ -49,6 +49,7 @@
 
   .home-subject__keyword-row {
     flex-shrink: 0;
+    width: max-content;
   }
 
   .home-subject__keyword {

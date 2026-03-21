@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, type Variants } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { useCountUp } from '../../hooks/useCountUp';
 import MessageBoard from '../MessageBoard';
 import PartnerCtaButton from '../../components/common/PartnerCtaButton';
@@ -37,6 +38,7 @@ const PROMPT_ICON = 'https://www.figma.com/api/mcp/asset/f1f269c6-55ad-468c-a1c9
 const PROMPT_ACTION_ICON = 'https://www.figma.com/api/mcp/asset/33e24b1a-b456-42bf-a7b6-3c809de7e7d1';
 
 const PdeAlgorithmExamples: React.FC = () => {
+  const { t } = useTranslation();
   const [isMessageOpen, setIsMessageOpen] = useState(false);
   const [metricsInView, setMetricsInView] = useState(false);
   const metricsRef = useRef<HTMLUListElement>(null);
@@ -60,35 +62,34 @@ const PdeAlgorithmExamples: React.FC = () => {
   return (
     <section className="pde-algorithm-examples">
       <div className="pde-algorithm-examples__inner">
-        <h2 className="pde-algorithm-examples__title">企业级算法解决方案实例</h2>
+        <h2 className="pde-algorithm-examples__title">{t('fde.algorithm.title')}</h2>
 
         <div className="pde-algorithm-examples__block">
           <div className="pde-algorithm-examples__left">
             <div className="pde-algorithm-examples__meta">
-              <h3 className="pde-algorithm-examples__company">金鹰集团</h3>
-              <p className="pde-algorithm-examples__industry">商贸新零售</p>
+              <h3 className="pde-algorithm-examples__company">{t('fde.algorithm.company')}</h3>
+              <p className="pde-algorithm-examples__industry">{t('fde.algorithm.industry')}</p>
             </div>
 
             <p className="pde-algorithm-examples__intro">
-              金鹰集团为商贸新零售标杆企业，VERT.AI为其落地“100+ 业务节点，20+Agent应用场景”，
-              实现财务、法务、物业等全链路AI智能化升级，解决人工效率低、数据失真、决策滞后等痛点。
+              {t('fde.algorithm.intro')}
             </p>
 
-            <ul ref={metricsRef} className="pde-algorithm-examples__metrics" aria-label="算法落地成效">
+            <ul ref={metricsRef} className="pde-algorithm-examples__metrics" aria-label={t('fde.algorithm.metricsAria')}>
               <li className="pde-algorithm-examples__metric-item">
-                <span className="pde-algorithm-examples__metric-label">业务节点</span>
+                <span className="pde-algorithm-examples__metric-label">{t('fde.algorithm.metric1')}</span>
                 <span className="pde-algorithm-examples__metric-value-wrap">
                   <CountUpMetric end={100} suffix="+" inView={metricsInView} />
                 </span>
               </li>
               <li className="pde-algorithm-examples__metric-item">
-                <span className="pde-algorithm-examples__metric-label">Agent应用场景</span>
+                <span className="pde-algorithm-examples__metric-label">{t('fde.algorithm.metric2')}</span>
                 <span className="pde-algorithm-examples__metric-value-wrap">
                   <CountUpMetric end={20} suffix="+" inView={metricsInView} />
                 </span>
               </li>
               <li className="pde-algorithm-examples__metric-item">
-                <span className="pde-algorithm-examples__metric-label">人力成本降低</span>
+                <span className="pde-algorithm-examples__metric-label">{t('fde.algorithm.metric3')}</span>
                 <span className="pde-algorithm-examples__metric-value-wrap">
                   <CountUpMetric end={60} suffix="%+" inView={metricsInView} />
                 </span>
@@ -107,7 +108,7 @@ const PdeAlgorithmExamples: React.FC = () => {
               </div>
               <div className="pde-algorithm-examples__prompt">
                 <img className="pde-algorithm-examples__prompt-icon" src={PROMPT_ICON} alt="" />
-                <span className="pde-algorithm-examples__prompt-text">帮我生成1月的营收报表</span>
+                <span className="pde-algorithm-examples__prompt-text">{t('fde.algorithm.prompt')}</span>
                 <span className="pde-algorithm-examples__prompt-action">
                   <img src={PROMPT_ACTION_ICON} alt="" />
                 </span>

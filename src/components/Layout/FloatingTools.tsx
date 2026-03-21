@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { FloatButton, Popover } from 'antd';
-import { CustomerServiceOutlined, PhoneOutlined, WechatOutlined, VideoCameraOutlined, UpOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
+import {
+  CustomerServiceOutlined,
+  PhoneOutlined,
+  WechatOutlined,
+  VideoCameraOutlined,
+  UpOutlined,
+} from '@ant-design/icons';
 import { getAssetPath } from '../../utils/path';
 import './FloatingTools.css';
 
 const FloatingTools: React.FC = () => {
-  useTranslation(); // 保留用于未来扩展
+  const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -25,16 +31,16 @@ const FloatingTools: React.FC = () => {
 
   const wechatContent = (
     <div className="wechat-popover">
-      <img 
-        src={getAssetPath('/images/sidebar/wechat_code.png')} 
-        alt="微信二维码" 
+      <img
+        src={getAssetPath('/images/sidebar/wechat_code.png')}
+        alt={t('layout.floating.wechatQrAlt')}
         style={{ width: 150, height: 150 }}
         onError={(e) => {
-          // 如果图片不存在，使用占位符
-          e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgZmlsbD0iI2Y1ZjVmNSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjOTk5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+5b6u5L+h5Yqg6L295LitPC90ZXh0Pjwvc3ZnPg==';
+          e.currentTarget.src =
+            'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgZmlsbD0iI2Y1ZjVmNSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjOTk5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+V2VDaGF0PC90ZXh0Pjwvc3ZnPg==';
         }}
       />
-      <p>扫码添加微信</p>
+      <p>{t('layout.floating.wechatQrHint')}</p>
     </div>
   );
 
@@ -46,17 +52,19 @@ const FloatingTools: React.FC = () => {
         style={{ right: 24, bottom: 24 }}
         icon={<CustomerServiceOutlined />}
       >
-        <Popover content={wechatContent} title="微信咨询" placement="left">
-          <FloatButton icon={<WechatOutlined />} tooltip="微信咨询" />
+        <Popover content={wechatContent} title={t('layout.floating.wechatConsult')} placement="left">
+          <FloatButton icon={<WechatOutlined />} tooltip={t('layout.floating.wechatConsult')} />
         </Popover>
-        <FloatButton 
-          icon={<PhoneOutlined />} 
-          tooltip="电话咨询"
-          onClick={() => window.location.href = 'tel:400-880-0750'}
+        <FloatButton
+          icon={<PhoneOutlined />}
+          tooltip={t('layout.floating.phoneConsult')}
+          onClick={() => {
+            window.location.href = 'tel:400-880-0750';
+          }}
         />
-        <FloatButton 
-          icon={<VideoCameraOutlined />} 
-          tooltip="Demo体验"
+        <FloatButton
+          icon={<VideoCameraOutlined />}
+          tooltip={t('layout.floating.demo')}
           onClick={() => window.open('/demo', '_blank')}
         />
       </FloatButton.Group>
@@ -67,7 +75,7 @@ const FloatingTools: React.FC = () => {
           type="primary"
           style={{ right: 24, bottom: 100 }}
           onClick={scrollToTop}
-          tooltip="返回顶部"
+          tooltip={t('layout.floating.backToTop')}
         />
       )}
     </div>

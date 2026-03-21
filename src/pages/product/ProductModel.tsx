@@ -1,4 +1,5 @@
-﻿import React from 'react';
+import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getAssetPath } from '../../utils/path';
 import './ProductModel.css';
 
@@ -8,22 +9,32 @@ type ModelItem = {
   icon: string;
 };
 
-const models: ModelItem[] = [
-  { name: 'OpenAI GPT-4', capabilities: ['文本生成', '代码辅助', '多模态'], icon: '/images/icons/product/gpt用于大模型组件.svg' },
-  { name: 'Claude 3', capabilities: ['长文本理解', '分析推理', '创作'], icon: '/images/icons/product/claude用于大模型组件.svg' },
-  { name: 'deepseek', capabilities: ['文本生成', '代码辅助', '多模态'], icon: '/images/icons/product/DeepSeek用于大模型组件.svg' },
-  { name: '通义千问', capabilities: ['多语言', '多模态', '代码生成'], icon: '/images/icons/product/通义千问用于大模型组件.svg' },
-  { name: 'Gemini Pro', capabilities: ['推理', '创意', '多模态'], icon: '/images/icons/product/gemini用于大模型组件.png' },
-  { name: 'Kimi', capabilities: ['文本生成', '代码辅助', '多模态'], icon: '/images/icons/product/kimi用于大模型组件.svg' },
+const MODEL_ICONS = [
+  '/images/icons/product/gpt用于大模型组件.svg',
+  '/images/icons/product/claude用于大模型组件.svg',
+  '/images/icons/product/DeepSeek用于大模型组件.svg',
+  '/images/icons/product/通义千问用于大模型组件.svg',
+  '/images/icons/product/gemini用于大模型组件.png',
+  '/images/icons/product/kimi用于大模型组件.svg',
 ];
 
 const ProductModel: React.FC = () => {
+  const { t } = useTranslation();
+  const models = useMemo<ModelItem[]>(
+    () =>
+      (t('products.model.models', { returnObjects: true }) as Array<Omit<ModelItem, 'icon'>>).map((model, index) => ({
+        ...model,
+        icon: MODEL_ICONS[index] ?? MODEL_ICONS[0],
+      })),
+    [t]
+  );
+
   return (
     <section className="product-model">
       <div className="product-model__container">
         <header className="product-model__header">
-          <h2 className="product-model__title">通用大模型集成能力</h2>
-          <p className="product-model__subtitle">支持市场主流大模型快速匹配集成，一键连接顶尖AI能力</p>
+          <h2 className="product-model__title">{t('products.model.title')}</h2>
+          <p className="product-model__subtitle">{t('products.model.subtitle')}</p>
         </header>
 
         <div className="product-model__panel">
@@ -47,11 +58,11 @@ const ProductModel: React.FC = () => {
               <div className="product-model__right">
                 <div className="product-model__metric">
                   <p className="product-model__metric-value">200ms</p>
-                  <p className="product-model__metric-label">延迟</p>
+                  <p className="product-model__metric-label">{t('products.model.latency')}</p>
                 </div>
                 <div className="product-model__metric">
                   <p className="product-model__metric-value">98.5%</p>
-                  <p className="product-model__metric-label">准确率</p>
+                  <p className="product-model__metric-label">{t('products.model.accuracy')}</p>
                 </div>
               </div>
             </article>

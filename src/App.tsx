@@ -3,6 +3,8 @@ import { Layout } from 'antd';
 import Header from './components/Layout/Header';
 import Footer from './components/Layout/Footer';
 import { ScrollProvider } from './contexts/ScrollContext';
+import { useAppLanguage } from './hooks/useAppLanguage';
+import { useRuntimeTextTranslation } from './hooks/useRuntimeTextTranslation';
 import HomePage from './pages/HomePage';
 import ProductsPage from './pages/ProductsPage';
 import AboutPage from './pages/AboutPage';
@@ -14,6 +16,9 @@ import MaasPage from './pages/MaasPage';
 const { Content } = Layout;
 
 function App() {
+  const { language } = useAppLanguage();
+  useRuntimeTextTranslation(language);
+
   return (
     <ScrollProvider>
       <Layout className="app-layout">
