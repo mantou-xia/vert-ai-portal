@@ -174,7 +174,7 @@ const HomeCompanyDetail: React.FC = () => {
               <button
                 key={index}
                 type="button"
-                className={`${index === activeIndex ? 'home-company-detail__dot-active' : 'home-company-detail__dot'}`}
+                className={`home-company-detail__dot${index === activeIndex ? ' home-company-detail__dot--active' : ''}`}
                 onClick={() => setActiveIndex(index)}
                 aria-label={t('home.companyDetail.switchToCase', { index: index + 1 })}
               />

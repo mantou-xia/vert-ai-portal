@@ -43,9 +43,11 @@ const ProductFlowwork: React.FC = () => {
               {features.map((feature, index) => (
                 <li key={`feature-${index}`}>
                   <img src={checkIcon} alt="" aria-hidden className="product-flowwork__check-icon" />
-                  {feature.prefix}
-                  <span>{feature.highlight}</span>
-                  {feature.suffix}
+                  <span className="product-flowwork__feature-text">
+                    {feature.prefix}
+                    <span className="product-flowwork__feature-highlight">{feature.highlight}</span>
+                    {feature.suffix}
+                  </span>
                 </li>
               ))}
             </ul>

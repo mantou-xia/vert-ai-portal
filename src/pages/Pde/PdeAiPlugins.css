@@ -105,7 +105,9 @@
   }
 
   .pde-ai-plugins__pain-tag {
-    width: 40px;
+    width: fit-content;
+    padding: 0 8px;
+    min-width: 40px;
     height: 24px;
     border-radius: 6px;
     background: #1a1a1a;

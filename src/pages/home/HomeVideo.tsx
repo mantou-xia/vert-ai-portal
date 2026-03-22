@@ -18,11 +18,13 @@ function lerp(a: number, b: number, t: number) {
 }
 
 const HomeVideo: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const ctaWrapRef = useRef<HTMLDivElement | null>(null);
   const [isMessageOpen, setIsMessageOpen] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [videoStartBase, setVideoStartBase] = useState(440);
   const { setVideoFullscreen, setVideoProgress } = useScrollContext();
 
   const handleScroll = useCallback(() => {
@@ -46,11 +48,27 @@ const HomeVideo: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
+  const measureVideoStartBase = useCallback(() => {
+    const ctaWrap = ctaWrapRef.current;
+    if (!ctaWrap) return;
+    const nextTop = ctaWrap.offsetTop + ctaWrap.offsetHeight + 64;
+    setVideoStartBase(nextTop);
+  }, []);
+
+  useEffect(() => {
+    const raf = window.requestAnimationFrame(measureVideoStartBase);
+    const handleResize = () => measureVideoStartBase();
+    window.addEventListener('resize', handleResize, { passive: true });
+    return () => {
+      window.cancelAnimationFrame(raf);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [measureVideoStartBase, i18n.language]);
+
   const phase1 = clamp(progress / 0.6, 0, 1);
   const phase2 = clamp((progress - 0.6) / 0.4, 0, 1);
 
   const videoInset = lerp(5, 0, phase1);
-  const videoTopOffset = lerp(45, 0, phase1);
   const videoRadius = lerp(24, 0, phase1);
 
   const colorT = clamp(phase1 * 0.5 + phase2 * 0.5, 0, 1);
@@ -65,6 +83,8 @@ const HomeVideo: React.FC = () => {
   const labelOpacity = clamp(1 - phase1 * 1.5, 0, 1);
   const playBtnOpacity = clamp(1 - phase1 * 2, 0, 1);
   const titleLayerY = lerp(-90, 0, clamp(progress / 0.15, 0, 1));
+  const videoStartTop = videoStartBase + titleLayerY;
+  const videoTopOffset = lerp(videoStartTop, 0, phase1);
 
   return (
     <section ref={sectionRef} className="home-video-section">
@@ -78,6 +98,7 @@ const HomeVideo: React.FC = () => {
           </h2>
           <div
             className="home-video-cta-wrap"
+            ref={ctaWrapRef}
             style={{ opacity: ctaOpacity, pointerEvents: ctaOpacity < 0.1 ? 'none' : 'auto' }}
           >
             <CTAButton className="home-video-cta" onClick={() => setIsMessageOpen(true)} />
@@ -87,7 +108,7 @@ const HomeVideo: React.FC = () => {
         <div
           className="home-video-frame"
           style={{
-            top: `${videoTopOffset}%`,
+            top: `${videoTopOffset}px`,
             left: `${videoInset}%`,
             right: `${videoInset}%`,
             bottom: '0',

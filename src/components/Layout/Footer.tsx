@@ -50,9 +50,7 @@ const Footer: React.FC = () => {
           <div className="app-footer__cta">
             <h2 className="app-footer__cta-title">{t('layout.footer.ctaTitle')}</h2>
             <p className="app-footer__cta-desc">
-              {t('layout.footer.ctaDescLine1')}
-              <br />
-              {t('layout.footer.ctaDescLine2')}
+              {t('layout.footer.ctaDescLine')}
             </p>
           </div>
           <div className="app-footer__contact">
@@ -74,9 +72,7 @@ const Footer: React.FC = () => {
                   <p>{t('layout.footer.phone')}</p>
                   <p>{t('layout.footer.email')}</p>
                   <p>
-                    {t('layout.footer.addressLine1')}
-                    <br />
-                    {t('layout.footer.addressLine2')}
+                    {t('layout.footer.addressLine')}
                   </p>
                 </div>
               </div>

@@ -176,28 +176,34 @@
   }
 
   .home-company-detail__dot {
+    width: 10px;
+    height: 16px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .home-company-detail__dot::before {
+    content: '';
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    border: none;
     background: #d1d5db;
-    cursor: pointer;
-    padding: 0;
-    transition: all 0.2s ease;
+    transition: width 0.2s ease, height 0.2s ease, border-radius 0.2s ease, background 0.2s ease;
   }
 
-  .home-company-detail__dot-active {
+  .home-company-detail__dot--active::before {
     width: 10px;
     height: 16px;
-    border-radius: 50%;
-    border: none;
+    border-radius: 999px;
     background: #1a1a1a;
-    cursor: pointer;
-    padding: 0;
-    transition: all 0.2s ease;
   }
 
-  .home-company-detail__dot:hover:not(.home-company-detail__dot--active) {
+  .home-company-detail__dot:hover:not(.home-company-detail__dot--active)::before {
     background: #9ca3af;
   }
 

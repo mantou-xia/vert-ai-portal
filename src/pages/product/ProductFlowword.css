@@ -66,18 +66,24 @@
   .product-flowwork__features li {
     display: flex;
     align-items: center;
+    gap: 16px;
     font-family: 'Alibaba PuHuiTi 3.0';
     font-size: 24px;
     line-height: 1.4;
+    width: 100%;
+    max-width: 440px;
     color: rgba(60, 60, 67, 0.6);
   }
-  .product-flowwork__features li img{
-    margin-right: 16px;
+
+  .product-flowwork__feature-text {
+    display: inline;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: break-word;
   }
 
-  .product-flowwork__features span {
+  .product-flowwork__feature-highlight {
     color: rgb(0, 0, 0);
-    
     font-family: 'Alibaba PuHuiTi 3.0';
   }
 
@@ -85,6 +91,7 @@
     flex: 0 0 auto;
     width: 22.456px;
     height: 20px;
+    align-self: center;
     display: block;
     object-fit: contain;
   }

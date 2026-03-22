@@ -28,14 +28,12 @@ const enUS = {
     },
     footer: {
       ctaTitle: 'Ready for the next generation of AI applications?',
-      ctaDescLine1: 'Integrate RAG pipelines, rich integrations, and complete observability in one place,',
-      ctaDescLine2: 'so you can launch production-grade AI agents without heavy overhead.',
+      ctaDescLine: 'Integrate RAG pipelines, rich integrations, and complete observability in one place,so you can launch production-grade AI agents without heavy overhead',
       qrLabel: 'WeChat',
       contactTitle: 'Contact Us',
       phone: 'Phone: 18751969612',
       email: 'Email: m278398343@163.com',
-      addressLine1: 'Address: No.6 Baoxing Road, Haiwang Community, Xin’an Street, Bao’an District, Shenzhen',
-      addressLine2: 'Haina Baichuan Building B, 6F',
+      addressLine: 'Address: 6/F, Block B, Haina Baichuan Building, No. 6 Baoxing Road, Haiwang Community, Xin’an Subdistrict, Bao’an District, Shenzhen, China',
       copyright: '© 2025 Breakthrough Energy, LLC. All Rights Reserved',
     },
   },
@@ -80,9 +78,9 @@ const enUS = {
     },
     subject: {
       label: 'Out of the box, production ready',
-      keyword1: 'Flexible Extension',
-      keyword2: 'Reliable Stability',
-      keyword3: 'Security Assurance',
+      keyword1: 'Scalable',
+      keyword2: 'Reliable',
+      keyword3: 'Secure',
       desc1: 'VERT calmly handles traffic growth and changing requirements with a solid foundation,',
       desc2: 'ensuring you can operate with confidence and peace of mind,',
       desc3: 'and protecting your core data assets with enterprise-grade security.',
@@ -196,8 +194,8 @@ const enUS = {
       cards: [
         {
           key: 'service',
-          title: 'AI Customer Service (Enterprise-wide scenarios)',
-          tag: 'Pain Point',
+          title: 'AI Customer Service (All-in-one)',
+          tag: 'pain spot',
           pain: 'High-frequency inquiries consume manpower, responses are slow, and there is no full-time coverage.',
           aiService: 'Integrates full-scenario knowledge and multi-turn guidance, online **7*24h**, with Q&A statistics and document recommendation.',
           coreValue: '**AI replaces 60%** of high-frequency inquiries; response speed is seconds; **80%** of issues are closed by AI.',
@@ -205,7 +203,7 @@ const enUS = {
         {
           key: 'legal',
           title: 'AI Legal Consultation Expert',
-          tag: 'Pain Point',
+          tag: 'Pain spot',
           pain: 'Manual contract review is error-prone and expensive; approval cycles are slow and communication cost is high.',
           aiService: 'Real-time contract attachment and OA form checks, risk clause marking, and seamless OA integration for compliance alerts.',
           coreValue: 'Critical element check error rate reduced to **0**; **50%** legal capacity released; single contract review time reduced by **50%+**.',
@@ -223,7 +221,7 @@ const enUS = {
     },
     aiPlugins: {
       title: 'AI Expert Plugin Matrix',
-      painTag: 'Pain Point',
+      painTag: 'Pain spot',
       aiServiceTitle: 'AI Service',
       coreValueTitle: 'Core Value',
       cards: [

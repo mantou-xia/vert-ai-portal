@@ -23,6 +23,8 @@
 
   .product-plugins__title {
     margin: 0;
+    min-width: 550px;
+    width: fit-content;
     font-family: 'Alibaba PuHuiTi 3.0', 'PingFang SC', sans-serif;
     font-size: 36px;
     font-weight: 700;
@@ -37,7 +39,9 @@
     font-weight: 400;
     line-height: 32px;
     color: rgba(114, 114, 114, 0.6);
-    white-space: nowrap;
+    min-width: 512px;
+    width: fit-content;
+    max-width: 785px;
   }
 
   .product-plugins__diagram {
@@ -213,8 +217,10 @@
     font-weight: 400;
     line-height: 1;
     color: #1f1f1f;
-    white-space: nowrap;
     text-align: center;
+    min-width: 64px;
+    max-width: 96px;
+    width: fit-content;
   }
 
   .product-plugins__stats {
