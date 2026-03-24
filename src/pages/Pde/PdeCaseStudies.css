@@ -1,16 +1,13 @@
 .pde-case-studies {
-  padding: 0;
-  background: #fff;
   margin-top: 120px;
+  background: #fff;
+
   .pde-case-studies__inner {
-    width: 100%;
-    max-width: 1760px;
+    width: min(1760px, calc(100% - 80px));
     margin: 0 auto;
-    padding: 0 80px;
     display: flex;
     flex-direction: column;
     gap: 64px;
-    box-sizing: border-box;
   }
 
   .pde-case-studies__title {
@@ -28,27 +25,37 @@
     min-height: 588px;
     border-radius: 32px;
     background: #101010;
+    overflow: hidden;
+    padding: 100px 0;
+    box-sizing: border-box;
+  }
+
+  .pde-case-studies__block-inner {
+    max-width: 1400px;
+    width: 100%;
+    height: 388px;
+    padding-left: 100px;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 64px 0 64px 200px;
-    overflow: hidden;
+    gap: 63px;
   }
 
   .pde-case-studies__left {
     width: 600px;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    height: 100%;
     color: #fff;
-    position: relative;
-    z-index: 1;
   }
 
   .pde-case-studies__meta {
     display: flex;
     flex-direction: column;
     gap: 0;
+    margin-bottom: 32px;
   }
 
   .pde-case-studies__company {
@@ -62,8 +69,7 @@
 
   .pde-case-studies__industry {
     margin: 0;
-    color: #fff;
-    opacity: 0.6;
+    color: rgba(255, 255, 255, 0.6);
     font-family: "Alibaba PuHuiTi 3.0", "PingFang SC", sans-serif;
     font-size: 20px;
     font-weight: 400;
@@ -89,6 +95,8 @@
   }
 
   .pde-case-studies__list li {
+    display: flex;
+    align-items: flex-start;
     color: #fff;
     font-family: "Alibaba PuHuiTi 3.0", "PingFang SC", sans-serif;
     font-size: 16px;
@@ -97,133 +105,117 @@
   }
 
   .pde-case-studies__num {
-    margin-right: 6px;
+    flex: 0 0 auto;
+    margin-right: 8px;
     color: #aeff21;
     font-family: "Alibaba PuHuiTi 3.0", "PingFang SC", sans-serif;
     font-size: 18px;
     font-weight: 700;
-    line-height: 40px;
+    line-height: 28px;
   }
 
-  .pde-case-studies__btn {
-    width: max-content;
-    height: 64px;
+  .partner-cta-button.pde-case-studies__btn {
+    margin-top: 48px;
+    width: fit-content;
+    height: 48px;
     padding: 0 20px 0 24px;
-    border: none;
-    border-radius: 100px;
-    background: #aeff21;
-    color: #000;
-    font-family: "PingFang SC", sans-serif;
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 20px;
-    display: inline-flex;
-    align-items: center;
     gap: 8px;
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
+    border-radius: 100px;
+    font-size: 16px;
+    line-height: 16px;
   }
 
-  .pde-case-studies__btn:hover {
-    background: #bfff37;
-    transform: translateY(-1px);
+  .partner-cta-button.pde-case-studies__btn .partner-cta-button__icon {
+    width: 14px;
+    height: 14px;
   }
 
   .pde-case-studies__right {
-    position: relative;
-    width: 633px;
-    height: 460px;
-    margin-right: 0;
+    flex: 0 0 auto;
+    width: 597px;
+    max-width: 100%;
+    height: 344px;
   }
 
   .pde-case-studies__image {
-    position: absolute;
-    object-fit: cover;
+    width: 100%;
+    height: 100%;
     display: block;
-    border-left: 2px solid #000;
-    border-top: 2px solid #000;
-    border-bottom: 2px solid #000;
-    border-top-left-radius: 24px;
-    border-bottom-left-radius: 24px;
+    border-radius: 24px;
+    object-fit: cover;
   }
 
-  .pde-case-studies__image--back {
-    width: 551px;
-    height: 320px;
-    right: 0;
-    bottom: 0;
-  }
-
-  .pde-case-studies__image--middle {
-    width: 633px;
-    height: 320px;
-    left: 0;
-    top: 60px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
-  }
-
-  .pde-case-studies__image--front {
-    width: 551px;
-    height: 320px;
-    right: 0;
-    top: 0;
-    border-width: 1.778px;
-    border-top-left-radius: 21.333px;
-    border-bottom-left-radius: 21.333px;
-    box-shadow: 0 7px 21px rgba(0, 0, 0, 0.16);
-  }
-
-  @media (max-width: 1600px) {
-    .pde-case-studies__block {
-      padding: 56px 40px;
-      gap: 24px;
-    }
-
-    .pde-case-studies__left {
-      width: min(600px, 52%);
-      gap: 24px;
-    }
-
-    .pde-case-studies__right {
-      width: min(633px, 44%);
-      aspect-ratio: 633 / 460;
-      height: auto;
-    }
-
-    .pde-case-studies__image--back,
-    .pde-case-studies__image--front {
-      width: 87.04%;
-      height: 69.56%;
-    }
-
-    .pde-case-studies__image--middle {
-      width: 100%;
-      height: 69.56%;
-      top: 13.04%;
-    }
-  }
-
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) {
     .pde-case-studies__inner {
-      padding: 0 40px;
-      gap: 36px;
+      width: calc(100% - 48px);
+      gap: 48px;
     }
 
     .pde-case-studies__title {
-      font-size: 28px;
-      line-height: 38px;
+      font-size: 32px;
+      line-height: 44px;
     }
 
     .pde-case-studies__block {
       min-height: auto;
+      padding: 64px 0;
+    }
+
+    .pde-case-studies__block-inner {
+      width: calc(100% - 64px);
+      gap: 36px;
+    }
+
+    .pde-case-studies__left {
+      width: min(600px, 56%);
+      gap: 24px;
+    }
+
+    .pde-case-studies__company {
+      font-size: 32px;
+      line-height: 44px;
+    }
+
+    .pde-case-studies__industry {
+      font-size: 18px;
+      line-height: 26px;
+    }
+
+    .pde-case-studies__right {
+      width: min(520px, 44%);
+      height: auto;
+      aspect-ratio: 597 / 344;
+    }
+  }
+
+  @media (max-width: 768px) {
+    margin-top: 88px;
+
+    .pde-case-studies__inner {
+      width: calc(100% - 32px);
+      gap: 32px;
+    }
+
+    .pde-case-studies__title {
+      font-size: 26px;
+      line-height: 36px;
+    }
+
+    .pde-case-studies__block {
       border-radius: 24px;
+      padding: 32px 0 40px;
+    }
+
+    .pde-case-studies__block-inner {
+      width: calc(100% - 32px);
       flex-direction: column;
       align-items: flex-start;
-      padding: 32px 24px;
+      gap: 24px;
     }
 
     .pde-case-studies__left {
       width: 100%;
+      gap: 24px;
     }
 
     .pde-case-studies__company {
@@ -242,20 +234,25 @@
       line-height: 24px;
     }
 
+    .pde-case-studies__num {
+      font-size: 16px;
+      line-height: 24px;
+      margin-right: 6px;
+    }
+
+    .partner-cta-button.pde-case-studies__btn {
+      height: 46px;
+      font-size: 15px;
+      line-height: 15px;
+    }
+
     .pde-case-studies__right {
       width: 100%;
-      margin-top: 8px;
+      max-width: 597px;
     }
 
-    .pde-case-studies__btn {
-      height: 52px;
-      font-size: 16px;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .pde-case-studies__inner {
-      padding: 0 24px;
+    .pde-case-studies__image {
+      border-radius: 16px;
     }
   }
 }

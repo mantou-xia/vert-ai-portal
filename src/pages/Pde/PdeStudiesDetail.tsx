@@ -4,6 +4,10 @@ import { useTranslation } from 'react-i18next';
 import './PdeStudiesDetail.css';
 
 const EASE = [0.16, 1, 0.3, 1] as const;
+const DETAIL_CARD_WIDTH = 576;
+const DETAIL_CARD_GAP = 16;
+const DETAIL_CARD_COUNT = 3;
+const DETAIL_TOTAL_WIDTH = DETAIL_CARD_WIDTH * DETAIL_CARD_COUNT + DETAIL_CARD_GAP * (DETAIL_CARD_COUNT - 1);
 
 type DetailCard = {
   key: string;
@@ -17,9 +21,9 @@ type DetailCard = {
 };
 
 const DETAIL_CARD_IMAGES: Record<string, string> = {
-  service: 'https://www.figma.com/api/mcp/asset/a11f3581-5a75-48c2-bdea-1c67ac4bd756',
-  legal: 'https://www.figma.com/api/mcp/asset/0240d441-e3a7-4502-b4cf-f48b98c5d588',
-  audit: 'https://www.figma.com/api/mcp/asset/0dedae14-c269-4707-b4ff-3a1a602de09a',
+  service: '../../../public/images/icons/fde/image_1.png',
+  legal: '../../../public/images/icons/fde/image_2.png',
+  audit: '../../../public/images/icons/fde/image_3.png',
 };
 
 function parseHighlight(text: string): React.ReactNode {
@@ -48,7 +52,14 @@ function parseHighlight(text: string): React.ReactNode {
 const PdeStudiesDetail: React.FC = () => {
   const { t } = useTranslation();
   const sectionRef = useRef<HTMLElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
+  const dragStateRef = useRef({
+    active: false,
+    startX: 0,
+    startScrollLeft: 0,
+  });
   const [hasAnimated, setHasAnimated] = useState(false);
+  const [canCenterAllCards, setCanCenterAllCards] = useState(false);
   const hasPlayed = useRef(false);
   const detailCards = useMemo(
     () =>
@@ -75,18 +86,100 @@ const PdeStudiesDetail: React.FC = () => {
     return () => io.disconnect();
   }, []);
 
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const updateFitState = () => {
+      setCanCenterAllCards(el.clientWidth >= DETAIL_TOTAL_WIDTH);
+    };
+
+    updateFitState();
+    const resizeObserver = new ResizeObserver(updateFitState);
+    resizeObserver.observe(el);
+    window.addEventListener('resize', updateFitState);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', updateFitState);
+    };
+  }, []);
+
+  useEffect(() => {
+    const inner = innerRef.current;
+    if (!inner) return;
+
+    const handleMouseMove = (event: MouseEvent) => {
+      const dragState = dragStateRef.current;
+      if (!dragState.active) return;
+      const deltaX = event.clientX - dragState.startX;
+      inner.scrollLeft = dragState.startScrollLeft - deltaX;
+      event.preventDefault();
+    };
+
+    const handleMouseUp = () => {
+      if (!dragStateRef.current.active) return;
+      dragStateRef.current.active = false;
+      inner.classList.remove('is-dragging');
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, []);
+
+  useEffect(() => {
+    const inner = innerRef.current;
+    if (!inner) return;
+    if (!canCenterAllCards) return;
+    dragStateRef.current.active = false;
+    inner.classList.remove('is-dragging');
+    inner.scrollLeft = 0;
+  }, [canCenterAllCards]);
+
+  const handleInnerMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.button !== 0) return;
+    if (canCenterAllCards) return;
+    const inner = innerRef.current;
+    if (!inner) return;
+    dragStateRef.current.active = true;
+    dragStateRef.current.startX = event.clientX;
+    dragStateRef.current.startScrollLeft = inner.scrollLeft;
+    inner.classList.add('is-dragging');
+  };
+
   return (
     <section ref={sectionRef} className="pde-studies-detail">
-      <div className="pde-studies-detail__inner">
+      <div
+        ref={innerRef}
+        className={[
+          'pde-studies-detail__inner',
+          canCenterAllCards ? 'pde-studies-detail__inner--fit-all' : '',
+        ]
+          .filter(Boolean)
+          .join(' ')}
+        onMouseDown={handleInnerMouseDown}
+      >
         {detailCards.map((card, index) => (
           <motion.article
             key={card.key}
-            className={`pde-studies-detail__card${card.isAudit ? ' pde-studies-detail__card--audit' : ''}`}
-            initial={{ x: 80, opacity: 0 }}
-            animate={hasAnimated ? { x: 0, opacity: 1 } : { x: 80, opacity: 0 }}
+            tabIndex={0}
+            className={[
+              'pde-studies-detail__card',
+              card.isAudit ? 'pde-studies-detail__card--audit' : '',
+              card.key !== 'service' ? 'pde-studies-detail__card--wide-tag' : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+            initial={{ y: '33.333%', opacity: 0 }}
+            animate={hasAnimated ? { y: '0%', opacity: 1 } : { y: '33.333%', opacity: 0 }}
             transition={{
-              duration: 0.6,
-              ease: EASE,
+              y: { duration: 1, ease: EASE },
+              opacity: { duration: 0.5, ease: EASE },
               delay: index * 0.1,
             }}
           >
@@ -107,7 +200,7 @@ const PdeStudiesDetail: React.FC = () => {
                   {parseHighlight(card.aiService)}
                 </p>
               </div>
-              <div className="pde-studies-detail__expand-block">
+              <div className="pde-studies-detail__expand-block_2">
                 <p className="pde-studies-detail__expand-title">{t('fde.studiesDetail.coreValueTitle')}</p>
                 <p className="pde-studies-detail__expand-text">
                   {parseHighlight(card.coreValue)}

@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+﻿import React, { useState, useRef, useEffect } from 'react';
 import { motion, type Variants } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useCountUp } from '../../hooks/useCountUp';
 import MessageBoard from '../MessageBoard';
 import PartnerCtaButton from '../../components/common/PartnerCtaButton';
+import { getAssetPath } from '../../utils/path';
 import './PdeAlgorithmExamples.css';
 
 const slotVariants: Variants = {
@@ -33,9 +34,11 @@ const CountUpMetric: React.FC<{
   );
 };
 
-const CASE_IMAGE = 'https://www.figma.com/api/mcp/asset/7760de7b-ea5f-4789-b6ba-750fe18899f9';
-const PROMPT_ICON = 'https://www.figma.com/api/mcp/asset/f1f269c6-55ad-468c-a1c9-6733b9d1a498';
-const PROMPT_ACTION_ICON = 'https://www.figma.com/api/mcp/asset/33e24b1a-b456-42bf-a7b6-3c809de7e7d1';
+const VISUAL_BACK_IMAGE = getAssetPath('/images/icons/fde/PdeAlgorithmExamples_back.png');
+const VISUAL_MAIN_IMAGE = getAssetPath('/images/icons/fde/image_PdeAlgorithmExamples.png');
+const VISUAL_PROMPT_BACK_IMAGE = getAssetPath('/images/icons/fde/propmt_back.png');
+const VISUAL_PROMPT_ICON = 'https://www.figma.com/api/mcp/asset/a60d1600-ae5d-462b-b159-5f0841b6f2c6';
+const VISUAL_PROMPT_ACTION = 'https://www.figma.com/api/mcp/asset/e8836924-e1cc-4df4-a068-c13a81ca4dd8';
 
 const PdeAlgorithmExamples: React.FC = () => {
   const { t } = useTranslation();
@@ -101,21 +104,22 @@ const PdeAlgorithmExamples: React.FC = () => {
               onClick={() => setIsMessageOpen(true)}
             />
           </div>
-          <div className="pde-algorithm-examples__visual-image-wrapper">
-            <div className="pde-algorithm-examples__visual" aria-hidden>
-              <div className="pde-algorithm-examples__visual-frame">
-                <img className="pde-algorithm-examples__visual-image" src={CASE_IMAGE} alt="" />
-              </div>
-              <div className="pde-algorithm-examples__prompt">
-                <img className="pde-algorithm-examples__prompt-icon" src={PROMPT_ICON} alt="" />
-                <span className="pde-algorithm-examples__prompt-text">{t('fde.algorithm.prompt')}</span>
-                <span className="pde-algorithm-examples__prompt-action">
-                  <img src={PROMPT_ACTION_ICON} alt="" />
-                </span>
-              </div>
+          <div className="pde-algorithm-examples__visual" aria-hidden>
+            <img
+              className="pde-algorithm-examples__visual-back"
+              src={VISUAL_BACK_IMAGE}
+              alt=""
+            />
+            <div className="pde-algorithm-examples__visual-main">
+              <img className="pde-algorithm-examples__visual-main-image" src={VISUAL_MAIN_IMAGE} alt="" />
+            </div>
+            <div className="pde-algorithm-examples__prompt">
+              <img className="pde-algorithm-examples__prompt-back" src={VISUAL_PROMPT_BACK_IMAGE} alt="" />
+              <img className="pde-algorithm-examples__prompt-icon" src={VISUAL_PROMPT_ICON} alt="" />
+              <span className="pde-algorithm-examples__prompt-text">{t('fde.algorithm.prompt')}</span>
+              <img className="pde-algorithm-examples__prompt-action" src={VISUAL_PROMPT_ACTION} alt="" />
             </div>
           </div>
-
         </div>
       </div>
 

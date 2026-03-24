@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import MessageBoard from '../MessageBoard';
 import CTAButton from '../../components/common/CTAButton';
@@ -16,7 +16,7 @@ const PdeMainImg: React.FC = () => {
     >
       <div className="pde-main-img__overlay" />
       <div className="pde-main-img__content">
-        <h1 className="pde-main-img__title">{t('fde.main.title')}</h1>
+        <p className="pde-main-img__title">{t('fde.main.title')}</p>
         <p className="pde-main-img__desc">
           {t('fde.main.desc')}
         </p>

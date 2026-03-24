@@ -7,7 +7,6 @@
     width: 100%;
     max-width: 1920px;
     margin: 0 auto;
-    padding: 0 280px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -44,7 +43,7 @@
     font-size: 19px;
     font-weight: 400;
     line-height: 32px;
-    
+
   }
 
   .pde-solution__cards {
@@ -59,12 +58,16 @@
 
   .pde-solution__card {
     min-height: 348px;
+    height: 100%;
+    width: 328px;
     border-radius: 24px;
     background: #f7f7f7;
     padding: 40px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    align-items: flex-start;
+    flex: 1 0 0;
+    align-self: stretch;
   }
 
   .pde-solution__card-icon {
@@ -97,6 +100,7 @@
     font-size: 20px;
     font-weight: 700;
     line-height: 28px;
+    width: 100%;
   }
 
   .pde-solution__card-desc {

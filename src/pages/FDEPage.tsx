@@ -46,7 +46,7 @@ const FDEPage: React.FC = () => {
           <PdeCaseStudies />
         </motion.section>
       </div>
-      <div className="fde-page__section-wrap">
+      {/* <div className="fde-page__section-wrap">
         <motion.section
           className="fde-page__section"
           initial="hidden"
@@ -56,7 +56,7 @@ const FDEPage: React.FC = () => {
         >
           <PdeStudiesDetail />
         </motion.section>
-      </div>
+      </div> */}
       <div className="fde-page__section-wrap">
         <motion.section
           className="fde-page__section"
