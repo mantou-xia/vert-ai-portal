@@ -1,5 +1,6 @@
 .home-video-section {
   position: relative;
+  margin-top: -88px;
   height: 300vh;
 
   .home-video-sticky {
@@ -10,9 +11,8 @@
   }
 
   .home-video-title-layer {
-    --title-layer-top: 170px;
     position: absolute;
-    top: 0;
+    top: 170px;
     left: 0;
     right: 0;
     z-index: 10;
@@ -30,7 +30,6 @@
   }
 
   .home-video-title-text-layer {
-    padding-top: var(--title-layer-top);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -140,8 +139,10 @@
 
 @media (max-width: 768px) {
   .home-video-section {
+    margin-top: 0;
+
     .home-video-title-layer {
-      --title-layer-top: 120px;
+      top: 120px;
     }
 
     .home-video-title {

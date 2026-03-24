@@ -8,6 +8,15 @@ import './HomeVideo.css';
 
 const VIDEO_SRC = getAssetPath('/videos/home/home_video.mp4');
 const POSTER_SRC = getAssetPath('/images/home/video-poster.png');
+const DESKTOP_TITLE_VIEWPORT_TOP = 170;
+const MOBILE_TITLE_VIEWPORT_TOP = 120;
+
+function getTitleViewportTop() {
+  if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+    return MOBILE_TITLE_VIEWPORT_TOP;
+  }
+  return DESKTOP_TITLE_VIEWPORT_TOP;
+}
 
 function clamp(v: number, min: number, max: number) {
   return Math.max(min, Math.min(max, v));
@@ -26,7 +35,6 @@ const HomeVideo: React.FC = () => {
   const [isMessageOpen, setIsMessageOpen] = useState(false);
   const [progress, setProgress] = useState(0);
   const [videoStartBase, setVideoStartBase] = useState(440);
-  const [titleTopOffset, setTitleTopOffset] = useState(170);
   const { setVideoFullscreen, setVideoProgress } = useScrollContext();
 
   const handleScroll = useCallback(() => {
@@ -44,16 +52,12 @@ const HomeVideo: React.FC = () => {
     setVideoProgress(p);
     setVideoFullscreen(p >= 0.92);
 
-    const header = document.querySelector<HTMLElement>('.app-header');
-    const headerBottom = header?.getBoundingClientRect().bottom ?? 96;
-    const nextTitleTopOffset = Math.round(headerBottom + 74);
-    setTitleTopOffset((prev) => (Math.abs(prev - nextTitleTopOffset) >= 1 ? nextTitleTopOffset : prev));
-
     const ctaWrap = ctaWrapRef.current;
-    if (ctaWrap) {
-      const nextVideoStartBase = Math.round(ctaWrap.offsetTop + ctaWrap.offsetHeight + 64);
-      setVideoStartBase((prev) => (Math.abs(prev - nextVideoStartBase) >= 1 ? nextVideoStartBase : prev));
-    }
+    if (!ctaWrap) return;
+
+    const titleViewportTop = getTitleViewportTop();
+    const nextVideoStartBase = Math.round(titleViewportTop + ctaWrap.offsetTop + ctaWrap.offsetHeight + 64);
+    setVideoStartBase((prev) => (Math.abs(prev - nextVideoStartBase) >= 1 ? nextVideoStartBase : prev));
   }, [setVideoFullscreen, setVideoProgress]);
 
   useLayoutEffect(() => {
@@ -62,35 +66,21 @@ const HomeVideo: React.FC = () => {
 
   useEffect(() => {
     let rafId: number | null = null;
-    let trackUntil = 0;
-    const header = document.querySelector<HTMLElement>('.app-header');
-
-    const tick = () => {
-      handleScroll();
-      if (window.performance.now() < trackUntil) {
-        rafId = window.requestAnimationFrame(tick);
-      } else {
-        rafId = null;
-      }
-    };
-
-    const startTracking = (durationMs = 260) => {
-      trackUntil = Math.max(trackUntil, window.performance.now() + durationMs);
+    const schedule = () => {
       if (rafId === null) {
-        rafId = window.requestAnimationFrame(tick);
+        rafId = window.requestAnimationFrame(() => {
+          rafId = null;
+          handleScroll();
+        });
       }
     };
 
-    const onScroll = () => startTracking(280);
-    const onResize = () => startTracking(360);
-    const onHeaderTransitionStart = () => startTracking(460);
-    const onHeaderTransitionEnd = () => startTracking(140);
+    const onScroll = () => schedule();
+    const onResize = () => schedule();
 
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onResize, { passive: true });
-    header?.addEventListener('transitionstart', onHeaderTransitionStart);
-    header?.addEventListener('transitionend', onHeaderTransitionEnd);
-    startTracking(520);
+    schedule();
 
     return () => {
       if (rafId !== null) {
@@ -98,8 +88,6 @@ const HomeVideo: React.FC = () => {
       }
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onResize);
-      header?.removeEventListener('transitionstart', onHeaderTransitionStart);
-      header?.removeEventListener('transitionend', onHeaderTransitionEnd);
     };
   }, [handleScroll, i18n.language]);
 
@@ -110,15 +98,15 @@ const HomeVideo: React.FC = () => {
 
   const ctaOpacity = clamp(1 - phase1 * 2, 0, 1);
   const playBtnOpacity = clamp(1 - phase1 * 2, 0, 1);
+  const titleViewportTop = getTitleViewportTop();
   const videoStartTop = videoStartBase;
   const videoTopOffset = lerp(videoStartTop, 0, phase1);
-  const titleWhiteClipTop = Math.max(0, videoTopOffset);
-  const titleLayerStyle = { ['--title-layer-top' as string]: `${titleTopOffset}px` } as React.CSSProperties;
+  const titleWhiteClipTop = Math.max(0, videoTopOffset - titleViewportTop);
 
   return (
     <section ref={sectionRef} className="home-video-section">
       <div ref={stickyRef} className="home-video-sticky">
-        <div className="home-video-title-layer" style={titleLayerStyle}>
+        <div className="home-video-title-layer">
           <div className="home-video-title-text-wrap">
             <div className="home-video-title-text-layer home-video-title-text-layer--base">
               <p className="home-video-github-label">
