@@ -67,7 +67,7 @@ const zhCN = {
     },
     itemShow: {
       title: '将 AI 创意变为现实，实现从构想到生产的“飞跃”',
-      fdeTitle: 'VERT.FDE',
+      fdeTitle: 'VERT.FDE：',
       fdeSubtitle: '现场交付与深度实施团队',
       maasTitle: 'VERT.MAAS',
       maasSubtitle: 'N 个垂直场景 AI Agent 插件（数字员工）',
