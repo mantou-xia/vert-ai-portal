@@ -1,7 +1,7 @@
 .product-main-img {
   position: relative;
   overflow: hidden;
-  padding: 160px 0 88px;
+  padding: 160px 0 104px;
   background: #0f1110;
   color: #fff;
 
@@ -74,18 +74,17 @@
   .product-main-img__container {
     position: relative;
     z-index: 1;
-    width: min(1360px, calc(100% - 80px));
+    max-width: 1360px;
+    width: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 54px;
   }
 
   .product-main-img__header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
     text-align: center;
   }
 
@@ -100,35 +99,24 @@
   }
 
   .product-main-img__subtitle {
-    margin: 0;
+    margin: 16px 0 40px;
     max-width: 785px;
-    font-size: 20px;
-    line-height: 1.6;
     text-align: center;
     font-family: "Alibaba PuHuiTi 3.0";
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
     line-height: 32px;
+    /* 160% */
 
     color: rgba(255, 255, 255, 0.6);
   }
 
-  .product-main-img__cta {
-    margin-top: 8px;
-    display: flex;
-    width: 180px;
-    height: 64px;
-    padding: 0 20px 0 24px;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-  }
 
   .product-main-img__hero {
     position: relative;
     width: min(1088px, 100%);
-    margin: 80px auto 0;
+    margin: 112px auto 124px;
     overflow: visible;
     isolation: isolate;
   }
@@ -229,6 +217,7 @@
     inset: 0;
     z-index: 1;
     pointer-events: none;
+    display: none;
   }
 
   .product-main-img__concentric-disk {
@@ -282,6 +271,10 @@
     stroke: rgba(174, 255, 33, 0.24);
   }
 
+  .product-main-img__topology-path--branch-soft {
+    stroke: rgba(174, 255, 33, 0.14);
+  }
+
   .product-main-img__topology-path--inner-fold {
     stroke-width: 3.2;
     stroke: rgba(174, 255, 33, 0.2);
@@ -292,16 +285,24 @@
     opacity: 0.74;
   }
 
-  .product-main-img__hero-shell--left .product-main-img__topology-path[data-lane='left'] {
-    stroke: rgba(174, 255, 33, 0.48);
-  }
-
-  .product-main-img__hero-shell--right .product-main-img__topology-path[data-lane='right'] {
-    stroke: rgba(174, 255, 33, 0.48);
-  }
-
   .product-main-img__topology-trail {
     mix-blend-mode: screen;
+  }
+
+  .product-main-img__topology-trail-path {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .product-main-img__topology-trail-path--glow {
+    stroke: rgba(174, 255, 33, 0.24);
+    stroke-width: 4.4;
+    filter: url(#productMainImgCardTrailBlur);
+  }
+
+  .product-main-img__topology-trail-path--core {
+    stroke-width: 2.25;
   }
 
   .product-main-img__topology-trail-track {
@@ -467,22 +468,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    filter: drop-shadow(0 0 18px rgba(174, 255, 33, 0.22));
-  }
-
-  .product-main-img__center-node::before {
-    content: '';
-    position: absolute;
-    width: 190%;
-    height: 190%;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(174, 255, 33, 0.18) 0%, rgba(174, 255, 33, 0.08) 34%, rgba(174, 255, 33, 0) 72%);
-    mix-blend-mode: screen;
-    opacity: 0.9;
-    z-index: 0;
   }
 
   .product-main-img__center-base {

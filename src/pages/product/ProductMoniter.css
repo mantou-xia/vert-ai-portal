@@ -9,7 +9,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 40px;
   }
 
   .product-moniter__header {
@@ -29,13 +28,20 @@
 
   .product-moniter__subtitle {
     margin: 0;
-    font-family: 'Alibaba PuHuiTi 3.0', 'PingFang SC', sans-serif;
     font-size: 20px;
-    line-height: 1.6;
-    color: rgba(26, 26, 26, 0.6);
+    color: #727272;
+    text-align: center;
+    font-family: "Alibaba PuHuiTi 3.0";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 32px;
+    /* 160% */
+    opacity: 0.6;
   }
 
   .product-moniter__grid {
+    margin: 64px 0 0;
     width: 100%;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -48,10 +54,7 @@
     border-radius: 24px;
     border: 1px solid #e4e4e4;
     overflow: hidden;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    padding: 0;
   }
 
   .product-moniter__card--perf {
@@ -70,27 +73,21 @@
     background: #f1f4fd;
   }
 
-  .product-moniter__image-placeholder {
+  .product-moniter__image {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
-    border-radius: 16px;
-    border: 2px dashed rgba(26, 26, 26, 0.2);
-    background: rgba(255, 255, 255, 0.35);
-    color: rgba(60, 60, 67, 0.55);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-family: 'Alibaba PuHuiTi 3.0', 'PingFang SC', sans-serif;
-    font-size: 20px;
-    line-height: 1.4;
-    padding: 20px;
+    display: block;
+    object-fit: cover;
+    object-position: center;
   }
 
   .product-moniter__stats {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 40px 0;
   }
 
   .product-moniter__stat {
@@ -122,6 +119,7 @@
 
     .product-moniter__container {
       width: calc(100% - 40px);
+
     }
 
     .product-moniter__title {
@@ -134,7 +132,6 @@
 
     .product-moniter__card {
       height: 380px;
-      padding: 24px;
     }
 
     .product-moniter__stat-value {
@@ -184,13 +181,7 @@
 
     .product-moniter__card {
       border-radius: 16px;
-      padding: 18px;
       min-height: 320px;
-    }
-
-    .product-moniter__image-placeholder {
-      font-size: 16px;
-      border-radius: 12px;
     }
 
     .product-moniter__stats {

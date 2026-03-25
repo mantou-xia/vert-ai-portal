@@ -6,6 +6,7 @@ import MessageBoard from '../MessageBoard';
 import './ProductFlowword.css';
 
 const checkIcon = getAssetPath('/images/icons/product/绿色对钩.svg');
+const workflowImage = getAssetPath('/images/icons/product/image_工作流.png');
 
 type FeatureItem = {
   prefix: string;
@@ -16,6 +17,7 @@ type FeatureItem = {
 const ProductFlowwork: React.FC = () => {
   const { t } = useTranslation();
   const [isMessageOpen, setIsMessageOpen] = useState(false);
+
   const stats = useMemo(
     () => [
       { value: '200+', label: t('products.flowwork.stat1') },
@@ -24,6 +26,7 @@ const ProductFlowwork: React.FC = () => {
     ],
     [t]
   );
+
   const features = useMemo(
     () => (t('products.flowwork.features', { returnObjects: true }) as FeatureItem[]) ?? [],
     [t]
@@ -58,9 +61,7 @@ const ProductFlowwork: React.FC = () => {
           </div>
 
           <div className="product-flowwork__right">
-            <div className="product-flowwork__image-placeholder" role="img" aria-label={t('products.flowwork.imageAria')}>
-              {t('products.flowwork.imageAria')}
-            </div>
+            <img className="product-flowwork__image" src={workflowImage} alt={t('products.flowwork.imageAria')} loading="lazy" />
           </div>
         </div>
 

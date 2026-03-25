@@ -1,5 +1,5 @@
-﻿.product-flowwork {
-  padding: 112px 0 0;
+.product-flowwork {
+  padding: 120px 0 0;
   background: #fff;
   color: #1a1a1a;
 
@@ -43,11 +43,11 @@
     overflow: hidden;
     background: #f7f7f7;
     display: grid;
-    grid-template-columns: 640px 1fr;
+    grid-template-columns: 640px 720px;
   }
 
   .product-flowwork__left {
-    padding: 80px;
+    padding: 80px 80px 72px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -60,18 +60,18 @@
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 24px;
   }
 
   .product-flowwork__features li {
+    width: 100%;
+    max-width: 470px;
     display: flex;
     align-items: center;
     gap: 16px;
-    font-family: 'Alibaba PuHuiTi 3.0';
+    font-family: 'Alibaba PuHuiTi 3.0', 'PingFang SC', sans-serif;
     font-size: 24px;
-    line-height: 1.4;
-    width: 100%;
-    max-width: 440px;
+    line-height: 1.42;
     color: rgba(60, 60, 67, 0.6);
   }
 
@@ -83,232 +83,38 @@
   }
 
   .product-flowwork__feature-highlight {
-    color: rgb(0, 0, 0);
-    font-family: 'Alibaba PuHuiTi 3.0';
+    color: #121212;
+    font-weight: 500;
   }
 
   .product-flowwork__check-icon {
     flex: 0 0 auto;
     width: 22.456px;
     height: 20px;
-    align-self: center;
     display: block;
     object-fit: contain;
   }
 
   .product-flowwork__cta {
+    margin-top: auto;
     align-self: flex-start;
   }
 
   .product-flowwork__right {
     position: relative;
-    background: #333;
-    display: flex;
-    flex-direction: column;
+    height: 560px;
+    background: #10171c;
+    overflow: hidden;
   }
 
-  .product-flowwork__image-placeholder {
-    position: relative;
-    z-index: 2;
-    width: min(540px, calc(100% - 48px));
-    height: 390px;
-    margin: auto;
-    border-radius: 16px;
-    border: 2px dashed rgba(255, 255, 255, 0.35);
-    background: rgba(255, 255, 255, 0.06);
-    color: rgba(255, 255, 255, 0.78);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Alibaba PuHuiTi 3.0', 'PingFang SC', sans-serif;
-    font-size: 20px;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-  }
-
-  .product-flowwork__right::before {
-    content: '';
+  .product-flowwork__image {
     position: absolute;
     inset: 0;
-    background:
-      linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-    background-size: 18px 18px;
-    opacity: 0.8;
-    pointer-events: none;
-  }
-
-  .product-flowwork__canvas-head {
-    position: relative;
-    z-index: 2;
-    height: 80px;
-    padding: 0 30px;
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 16px;
-  }
-
-  .product-flowwork__canvas-title {
-    margin-right: auto;
-    color: rgba(255, 255, 255, 0.6);
-  }
-
-  .product-flowwork__canvas-running {
-    position: relative;
-    padding-left: 14px;
-  }
-
-  .product-flowwork__canvas-running::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    transform: translateY(-50%);
-    background: #23c474;
-  }
-
-  .product-flowwork__canvas-toolbar {
-    width: 120px;
-    opacity: 0.7;
-  }
-
-  .product-flowwork__canvas-map {
-    position: relative;
-    z-index: 2;
-    width: 540px;
-    height: 390px;
-    margin: 0 auto;
-  }
-
-  .product-flowwork__line {
-    position: absolute;
-    border: 1px solid #d6d7ff;
-    border-radius: 12px;
-    opacity: 0.95;
-  }
-
-  .product-flowwork__line--1 {
-    left: 274px;
-    top: 44px;
-    width: 2px;
-    height: 26px;
-  }
-
-  .product-flowwork__line--2 {
-    left: 274px;
-    top: 118px;
-    width: 2px;
-    height: 34px;
-  }
-
-  .product-flowwork__line--3 {
-    left: 132px;
-    top: 202px;
-    width: 292px;
-    height: 132px;
-    border-top: 0;
-  }
-
-  .product-flowwork__line--4 {
-    left: 274px;
-    top: 334px;
-    width: 2px;
-    height: 22px;
-  }
-
-  .product-flowwork__node {
-    position: absolute;
-    width: 236px;
-    height: 46px;
-    border-radius: 8px;
-    border: 0.8px solid #4541f0;
-    background: #fff;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 0 14px;
-    color: #1a1a1a;
-    font-family: 'Source Han Sans CN', 'Alibaba PuHuiTi 3.0', sans-serif;
-    font-size: 14px;
-    box-shadow: 0 8px 18px rgba(69, 65, 240, 0.1);
-  }
-
-  .product-flowwork__node-icon {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(69, 65, 240, 0.08);
-  }
-
-  .product-flowwork__node-icon img {
-    width: 16px;
-    height: 16px;
-    object-fit: contain;
-  }
-
-  .product-flowwork__node--setup {
-    left: 156px;
-    top: 0;
-  }
-
-  .product-flowwork__node--collect {
-    left: 156px;
-    top: 68px;
-    transform: rotate(-5deg);
-  }
-
-  .product-flowwork__node--trigger {
-    left: 156px;
-    top: 136px;
-    height: 82px;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding-top: 10px;
-    gap: 0;
-  }
-
-  .product-flowwork__node--trigger .product-flowwork__node-icon {
-    margin-top: 2px;
-  }
-
-  .product-flowwork__node--direct {
-    left: 58px;
-    top: 252px;
-  }
-
-  .product-flowwork__node--action {
-    left: 256px;
-    top: 252px;
-  }
-
-  .product-flowwork__node--output {
-    left: 156px;
-    top: 316px;
-  }
-
-  .product-flowwork__node-subrow {
-    position: absolute;
-    left: 156px;
-    top: 186px;
-    width: 236px;
-    height: 30px;
-    border-radius: 0 0 8px 8px;
-    background: rgba(116, 116, 128, 0.08);
-    display: grid;
-    grid-template-columns: 1fr 18px 1fr;
-    align-items: center;
-    justify-items: center;
-    font-size: 11px;
-    color: rgba(60, 60, 67, 0.4);
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center center;
   }
 
   .product-flowwork__stats {
@@ -318,8 +124,20 @@
   }
 
   .product-flowwork__stat {
-    padding: 20px 30px;
+    position: relative;
+    padding: 16px 24px 12px;
     text-align: center;
+  }
+
+  .product-flowwork__stat:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 1px;
+    height: 56px;
+    transform: translateY(-50%);
+    background: rgba(18, 18, 18, 0.12);
   }
 
   .product-flowwork__stat-value {
@@ -328,11 +146,14 @@
     font-size: 48px;
     font-weight: 700;
     line-height: 1.2;
+    color: #1a1a1a;
   }
 
   .product-flowwork__stat-label {
-    margin: 12px 0 0;
+    margin: 10px 0 0;
+    font-family: 'Alibaba PuHuiTi 3.0', 'PingFang SC', sans-serif;
     font-size: 20px;
+    line-height: 1.4;
     color: rgba(60, 60, 67, 0.6);
   }
 
@@ -358,21 +179,22 @@
     }
 
     .product-flowwork__card {
-      grid-template-columns: 500px 1fr;
+      min-height: 520px;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
 
     .product-flowwork__left {
-      padding: 52px 40px;
+      padding: 56px 44px 48px;
     }
 
     .product-flowwork__features li {
-      font-size: 20px;
+      max-width: 100%;
+      font-size: 21px;
       gap: 12px;
     }
 
-    .product-flowwork__canvas-map {
-      transform: scale(0.88);
-      transform-origin: center top;
+    .product-flowwork__right {
+      height: 520px;
     }
 
     .product-flowwork__stat-value {
@@ -386,11 +208,12 @@
 
   @media (max-width: 1024px) {
     .product-flowwork__card {
+      min-height: auto;
       grid-template-columns: minmax(0, 1fr);
     }
 
     .product-flowwork__left {
-      padding: 40px 30px;
+      padding: 40px 30px 36px;
       gap: 24px;
     }
 
@@ -399,16 +222,23 @@
     }
 
     .product-flowwork__right {
-      min-height: 420px;
-      padding-bottom: 22px;
-    }
-
-    .product-flowwork__image-placeholder {
-      width: min(540px, calc(100% - 36px));
+      height: 420px;
     }
 
     .product-flowwork__stats {
       grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .product-flowwork__stat {
+      padding: 12px 10px;
+    }
+
+    .product-flowwork__stat-value {
+      font-size: 36px;
+    }
+
+    .product-flowwork__stat-label {
+      font-size: 16px;
     }
   }
 
@@ -433,8 +263,13 @@
       line-height: 1.6;
     }
 
+    .product-flowwork__card {
+      border-radius: 24px;
+    }
+
     .product-flowwork__left {
       padding: 28px 18px;
+      gap: 18px;
     }
 
     .product-flowwork__features {
@@ -443,28 +278,16 @@
 
     .product-flowwork__features li {
       font-size: 16px;
-    }
-
-    .product-flowwork__right {
-      min-height: 300px;
-    }
-
-    .product-flowwork__image-placeholder {
-      width: calc(100% - 24px);
-      height: 220px;
-      font-size: 14px;
-    }
-
-    .product-flowwork__canvas-head {
-      font-size: 13px;
-      padding: 0 12px;
       gap: 10px;
     }
 
-    .product-flowwork__canvas-map {
-      transform: scale(0.58);
-      transform-origin: center top;
-      margin-top: -24px;
+    .product-flowwork__check-icon {
+      width: 18px;
+      height: 16px;
+    }
+
+    .product-flowwork__right {
+      height: 300px;
     }
 
     .product-flowwork__stats {
@@ -474,6 +297,10 @@
 
     .product-flowwork__stat {
       padding: 8px;
+    }
+
+    .product-flowwork__stat::after {
+      content: none;
     }
 
     .product-flowwork__stat-value {

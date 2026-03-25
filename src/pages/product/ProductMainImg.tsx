@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+﻿import React, { useEffect, useRef, useState } from 'react';
 import CTAButton from '../../components/common/CTAButton';
 import { getAssetPath } from '../../utils/path';
 import MessageBoard from '../MessageBoard';
@@ -7,10 +7,11 @@ import './ProductMainImg.css';
 const HERO_CANVAS_WIDTH = 1088;
 const HERO_CANVAS_HEIGHT = 496;
 
-const CARD_TRAIL_POINT_COUNT = 36;
+const CARD_TRAIL_POINT_COUNT = 56;
 const CARD_TRAIL_HEAD_RADIUS = 1.58;
 const CARD_TRAIL_TAIL_RADIUS = 0.45;
 const CARD_TRAIL_FADE_POWER = 1.25;
+const CARD_TRAIL_MAX_GAP = 24;
 
 const BG_TRAIL_HEAD_RADIUS = 1.58;
 const BG_TRAIL_TAIL_RATIO = 0.15;
@@ -152,6 +153,25 @@ const buildTrailPath = (points: Array<{ x: number; y: number }>) => {
     return `M ${points[0].x} ${points[0].y}`;
   }
   return `M ${points[0].x} ${points[0].y} ${points.slice(1).map((p) => `L ${p.x} ${p.y}`).join(' ')}`;
+};
+
+const getContinuousTrailHistory = (history: Array<{ x: number; y: number }>, maxGap: number) => {
+  if (history.length === 0) {
+    return [];
+  }
+
+  const continuous = [history[0]];
+  for (let i = 1; i < history.length; i += 1) {
+    const prev = history[i - 1];
+    const current = history[i];
+    const gap = Math.hypot(current.x - prev.x, current.y - prev.y);
+    if (gap > maxGap) {
+      break;
+    }
+    continuous.push(current);
+  }
+
+  return continuous;
 };
 
 const ProductMainImg: React.FC = () => {
@@ -577,7 +597,7 @@ const ProductMainImg: React.FC = () => {
 
       <div className="product-main-img__container">
         <header className="product-main-img__header">
-          <h1 className="product-main-img__title">VERT 大模型中台 - 企业级一体化智能服务平台</h1>
+          <h1 className="product-main-img__title">VERT 大模型中台&nbsp;&nbsp;-&nbsp;&nbsp;企业级一体化智能服务平台</h1>
           <p className="product-main-img__subtitle">
             一站式实现大模型统一管理、智能 Agent 构建、知识库 &amp; RAG 引擎、可视化工作流编排与工具生态集成，低代码降低企业 AI 开发门槛，高可扩展赋能全场景 AI 落地执行
           </p>
@@ -636,34 +656,59 @@ const ProductMainImg: React.FC = () => {
               <path className="product-main-img__topology-path product-main-img__topology-path--main" d="M34 248H1054" />
 
               <path className="product-main-img__topology-path product-main-img__topology-path--branch" data-lane="left" d="M108.8 89.6H184C202.052 89.6 216.494 104.042 216.494 121.6V201.6" />
-              <path className="product-main-img__topology-path product-main-img__topology-path--branch" data-lane="left" d="M129 397H184C202.052 397 216.494 382.558 216.494 365V353.6" />
-              <path className="product-main-img__topology-path product-main-img__topology-path--branch" data-lane="left" d="M216.494 201.6V365.6" />
+              <path className="product-main-img__topology-path product-main-img__topology-path--branch product-main-img__topology-path--branch-soft" data-lane="left" d="M129 397H184C202.052 397 216.494 382.558 216.494 365V365.6" />
+              <path className="product-main-img__topology-path product-main-img__topology-path--branch product-main-img__topology-path--branch-soft" data-lane="left" d="M216.494 201.6V365.6" />
               <path className="product-main-img__topology-path product-main-img__topology-path--branch" data-lane="left" d="M216.408 132H274.2" />
               <path className="product-main-img__topology-path product-main-img__topology-path--branch" data-lane="left" d="M216.408 365.6H304" />
-              <path className="product-main-img__topology-path product-main-img__topology-path--inner-fold" data-lane="left" d="M216.408 132H347.599C360.854 132 371.599 142.745 371.599 156V188C371.599 201.255 382.344 212 395.599 212H549.865" />
-              <path className="product-main-img__topology-path product-main-img__topology-path--inner-fold" data-lane="left" d="M216.408 365.6H347.599C360.854 365.6 371.599 354.855 371.599 341.6V309.6C371.599 296.345 382.344 285.6 395.599 285.6H445.865" />
+              <path className="product-main-img__topology-path product-main-img__topology-path--inner-fold" data-lane="left" d="M216.408 132H347.599C360.854 132 371.599 142.745 371.599 156V188C371.599 201.255 382.344 212 395.599 212H544" />
+              <path className="product-main-img__topology-path product-main-img__topology-path--inner-fold" data-lane="left" d="M216.408 365.6H347.599C360.854 365.6 371.599 354.855 371.599 341.6V309.6C371.599 296.345 382.344 285.6 395.599 285.6H544" />
               <path className="product-main-img__topology-path product-main-img__topology-path--branch" data-lane="left" d="M274.199 248.8H357.708" />
-              <path className="product-main-img__topology-path product-main-img__topology-path--branch" data-lane="left" d="M456 285.6H496" />
 
               <path className="product-main-img__topology-path product-main-img__topology-path--branch" data-lane="right" d="M991 89.6H905C887.348 89.6 873.105 103.842 873.105 121.6V201.6" />
-              <path className="product-main-img__topology-path product-main-img__topology-path--branch" data-lane="right" d="M961 397H905C887.348 397 873.105 382.758 873.105 365V353.6" />
-              <path className="product-main-img__topology-path product-main-img__topology-path--branch" data-lane="right" d="M873.105 201.6V365.6" />
+              <path className="product-main-img__topology-path product-main-img__topology-path--branch product-main-img__topology-path--branch-soft" data-lane="right" d="M961 397H905C887.348 397 873.105 382.758 873.105 365V365.6" />
+              <path className="product-main-img__topology-path product-main-img__topology-path--branch product-main-img__topology-path--branch-soft" data-lane="right" d="M873.105 201.6V365.6" />
               <path className="product-main-img__topology-path product-main-img__topology-path--branch" data-lane="right" d="M873.191 132H815.4" />
               <path className="product-main-img__topology-path product-main-img__topology-path--branch" data-lane="right" d="M873.191 365.6H815.4" />
-              <path className="product-main-img__topology-path product-main-img__topology-path--inner-fold" data-lane="right" d="M873.191 132H741.999C728.744 132 717.999 142.745 717.999 156V188C717.999 201.255 707.254 212 693.999 212H491.734" />
-              <path className="product-main-img__topology-path product-main-img__topology-path--inner-fold" data-lane="right" d="M873.191 365.6H741.999C728.744 365.6 717.999 354.855 717.999 341.6V309.6C717.999 296.345 707.254 285.6 693.999 285.6H491.734" />
+              <path className="product-main-img__topology-path product-main-img__topology-path--inner-fold" data-lane="right" d="M873.191 132H741.999C728.744 132 717.999 142.745 717.999 156V188C717.999 201.255 707.254 212 693.999 212H544" />
+              <path className="product-main-img__topology-path product-main-img__topology-path--inner-fold" data-lane="right" d="M873.191 365.6H741.999C728.744 365.6 717.999 354.855 717.999 341.6V309.6C717.999 296.345 707.254 285.6 693.999 285.6H544" />
               <path className="product-main-img__topology-path product-main-img__topology-path--branch" data-lane="right" d="M815.402 248.8H898.91" />
-              <path className="product-main-img__topology-path product-main-img__topology-path--branch" data-lane="right" d="M633.599 285.6H697.599" />
 
               <g className="product-main-img__topology-trail">
                 {cardTrailGroups.map((group, groupIndex) => (
                   <g key={`card-trail-group-${groupIndex}`}>
-                    {[...group].reverse().map((point, pointIndex) => (
-                      <g key={`${groupIndex}-${pointIndex}-${point.x.toFixed(1)}-${point.y.toFixed(1)}`}>
-                        <circle cx={point.x} cy={point.y} r={point.radius * 1.06} fill="#AEFF21" opacity={point.alpha * 0.16} filter="url(#productMainImgCardTrailBlur)" />
-                        <circle cx={point.x} cy={point.y} r={point.radius} fill="#D5FF7D" opacity={Math.min(1, point.alpha * 1.08)} />
-                      </g>
-                    ))}
+                    {(() => {
+                      const continuousHistory = getContinuousTrailHistory(group, CARD_TRAIL_MAX_GAP);
+                      const trailPoints = [...continuousHistory].reverse();
+                      const trailPath = buildTrailPath(trailPoints);
+                      if (!trailPath) {
+                        return null;
+                      }
+                      const tailStart = trailPoints[0] ?? { x: 0, y: 0 };
+                      const trailHead = continuousHistory[0] ?? tailStart;
+                      const gradientId = `productMainImgCardTrailGrad-${groupIndex}`;
+                      return (
+                        <>
+                          <defs>
+                            <linearGradient id={gradientId} x1={tailStart.x} y1={tailStart.y} x2={trailHead.x} y2={trailHead.y} gradientUnits="userSpaceOnUse">
+                              <stop offset="0" stopColor="#D5FF7D" stopOpacity="0.04" />
+                              <stop offset="0.45" stopColor="#D5FF7D" stopOpacity="0.22" />
+                              <stop offset="1" stopColor="#D5FF7D" stopOpacity="0.92" />
+                            </linearGradient>
+                          </defs>
+                          <path d={trailPath} className="product-main-img__topology-trail-path product-main-img__topology-trail-path--glow" />
+                          <path d={trailPath} className="product-main-img__topology-trail-path product-main-img__topology-trail-path--core" stroke={`url(#${gradientId})`} />
+                          <circle
+                            cx={trailHead.x}
+                            cy={trailHead.y}
+                            r={CARD_TRAIL_HEAD_RADIUS * 1.18}
+                            fill="#AEFF21"
+                            opacity={0.14}
+                            filter="url(#productMainImgCardTrailBlur)"
+                          />
+                          <circle cx={trailHead.x} cy={trailHead.y} r={CARD_TRAIL_HEAD_RADIUS} fill="#D5FF7D" opacity={0.86} />
+                        </>
+                      );
+                    })()}
                   </g>
                 ))}
               </g>
@@ -673,22 +718,22 @@ const ProductMainImg: React.FC = () => {
               <path
                 ref={createCardPathRefHandler('card-left-upper-inner')}
                 className="product-main-img__topology-trail-track"
-                d="M216.408 132H347.599C360.854 132 371.599 142.745 371.599 156V188C371.599 201.255 382.344 212 395.599 212H549.865"
+                d="M216.408 132H347.599C360.854 132 371.599 142.745 371.599 156V188C371.599 201.255 382.344 212 395.599 212H544"
               />
               <path
                 ref={createCardPathRefHandler('card-right-upper-inner')}
                 className="product-main-img__topology-trail-track"
-                d="M873.191 132H741.999C728.744 132 717.999 142.745 717.999 156V188C717.999 201.255 707.254 212 693.999 212H491.734"
+                d="M873.191 132H741.999C728.744 132 717.999 142.745 717.999 156V188C717.999 201.255 707.254 212 693.999 212H544"
               />
               <path
                 ref={createCardPathRefHandler('card-left-lower-inner')}
                 className="product-main-img__topology-trail-track"
-                d="M216.408 365.6H347.599C360.854 365.6 371.599 354.855 371.599 341.6V309.6C371.599 296.345 382.344 285.6 395.599 285.6H445.865"
+                d="M216.408 365.6H347.599C360.854 365.6 371.599 354.855 371.599 341.6V309.6C371.599 296.345 382.344 285.6 395.599 285.6H544"
               />
               <path
                 ref={createCardPathRefHandler('card-right-lower-inner')}
                 className="product-main-img__topology-trail-track"
-                d="M873.191 365.6H741.999C728.744 365.6 717.999 354.855 717.999 341.6V309.6C717.999 296.345 707.254 285.6 693.999 285.6H491.734"
+                d="M873.191 365.6H741.999C728.744 365.6 717.999 354.855 717.999 341.6V309.6C717.999 296.345 707.254 285.6 693.999 285.6H544"
               />
             </svg>
 
@@ -745,7 +790,7 @@ const ProductMainImg: React.FC = () => {
                     </div>
                   ) : node.variant === 'claude' ? (
                     <div className="product-main-img__claude-layered">
-                      <img className="product-main-img__claude-disc" src={getAssetPath('/images/icons/product/claude透明底盘.svg')} alt="" aria-hidden loading="lazy" />
+                      <img className="product-main-img__claude-disc" src={getAssetPath('/images/icons/product/claude_back.svg')} alt="" aria-hidden loading="lazy" />
                       <span className="product-main-img__node-inner-white" aria-hidden />
                       <img className="product-main-img__claude-icon" src={getAssetPath('/images/icons/product/claude.png')} alt={node.alt} loading="lazy" />
                     </div>

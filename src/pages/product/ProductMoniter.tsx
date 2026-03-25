@@ -1,9 +1,36 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { getAssetPath } from '../../utils/path';
 import './ProductMoniter.css';
 
 const ProductMoniter: React.FC = () => {
   const { t } = useTranslation();
+  const monitorCards = useMemo(
+    () => [
+      {
+        className: 'product-moniter__card--perf',
+        src: getAssetPath('/images/icons/product/智能体监控.png'),
+        alt: t('products.monitor.paramPlaceholder'),
+      },
+      {
+        className: 'product-moniter__card--console',
+        src: getAssetPath('/images/icons/product/性能实时监控.png'),
+        alt: t('products.monitor.perfPlaceholder'),
+      },
+      {
+        className: 'product-moniter__card--param',
+        src: getAssetPath('/images/icons/product/自动产出分析报告.png'),
+        alt: t('products.monitor.consolePlaceholder'),
+      },
+      {
+        className: 'product-moniter__card--report',
+        src: getAssetPath('/images/icons/product/参数在线调试.png'),
+        alt: t('products.monitor.reportPlaceholder'),
+      },
+    ],
+    [t]
+  );
+
   const summaryStats = useMemo(
     () => [
       { value: '<200ms', label: t('products.monitor.stat1') },
@@ -22,29 +49,11 @@ const ProductMoniter: React.FC = () => {
         </header>
 
         <div className="product-moniter__grid">
-          <article className="product-moniter__card product-moniter__card--perf">
-            <div className="product-moniter__image-placeholder" role="img" aria-label={t('products.monitor.perfPlaceholder')}>
-              {t('products.monitor.perfPlaceholder')}
-            </div>
-          </article>
-
-          <article className="product-moniter__card product-moniter__card--console">
-            <div className="product-moniter__image-placeholder" role="img" aria-label={t('products.monitor.consolePlaceholder')}>
-              {t('products.monitor.consolePlaceholder')}
-            </div>
-          </article>
-
-          <article className="product-moniter__card product-moniter__card--param">
-            <div className="product-moniter__image-placeholder" role="img" aria-label={t('products.monitor.paramPlaceholder')}>
-              {t('products.monitor.paramPlaceholder')}
-            </div>
-          </article>
-
-          <article className="product-moniter__card product-moniter__card--report">
-            <div className="product-moniter__image-placeholder" role="img" aria-label={t('products.monitor.reportPlaceholder')}>
-              {t('products.monitor.reportPlaceholder')}
-            </div>
-          </article>
+          {monitorCards.map((card) => (
+            <article key={card.src} className={`product-moniter__card ${card.className}`}>
+              <img className="product-moniter__image" src={card.src} alt={card.alt} loading="lazy" />
+            </article>
+          ))}
         </div>
 
         <div className="product-moniter__stats">
